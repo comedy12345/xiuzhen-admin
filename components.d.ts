@@ -7,8 +7,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AButton: typeof import('ant-design-vue/es')['Button']
+    ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
+    AForm: typeof import('ant-design-vue/es')['Form']
+    AFormItem: typeof import('ant-design-vue/es')['FormItem']
+    AInput: typeof import('ant-design-vue/es')['Input']
+    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     AlibabaOutlined: typeof import('@ant-design/icons-vue')['AlibabaOutlined']
     GithubOutlined: typeof import('@ant-design/icons-vue')['GithubOutlined']
+    LockOutlined: typeof import('@ant-design/icons-vue')['LockOutlined']
     MenuItem: typeof import('./src/components/MenuItem/index.vue')['default']
     MyBreadcrumb: typeof import('./src/components/MyBreadcrumb/index.vue')['default']
     MyHeader: typeof import('./src/components/MyHeader/index.vue')['default']
@@ -16,5 +23,6 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
+    UserOutlined: typeof import('@ant-design/icons-vue')['UserOutlined']
   }
 }

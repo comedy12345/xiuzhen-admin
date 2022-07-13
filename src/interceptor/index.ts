@@ -4,6 +4,7 @@ import { Key } from "ant-design-vue/lib/vc-table/interface";
 
 router.beforeEach((to, from) => {
       const { $state:{ routeHistorys ,selectdOpenKeys},editSelectdOpenKeys }=useRouteHistoryStore();
+      if(to.path==='/login') return;
       
       getPath("","",selectdOpenKeys,editSelectdOpenKeys,false,to.path);
 

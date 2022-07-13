@@ -4,7 +4,7 @@ export const routes: RouteRecordRaw[] = [
       {
             path: '',
             component: () => import('@/views/layout/index.vue'),
-            redirect: 'dashboard',
+            redirect: '/login',
             children: [
                   {
                         name: '首页',
@@ -12,39 +12,31 @@ export const routes: RouteRecordRaw[] = [
                         component: () => import('@/views/home/index.vue')
                   },
                   {
-                        name: '测试一',
-                        path: '/test1',
-                        redirect: '/test1/sonMenu',
-                        component: () => import('@/views/test/index.vue'),
-                        children: [
-                              {
-                                    name: '子菜单',
-                                    path: '/test1/sonMenu',
-                                    redirect: '/test1/sonMenu/three',
-                                    component: () => import('@/views/test/test1-1/index.vue'),
-                                    children: [
-                                          {
-                                                name: '子菜单3层',
-                                                path: '/test1/sonMenu/three',
-                                                component: () => import('@/views/test/test1-1/three/index.vue'),
-                                          }
-                                    ]
-                              },
-                              {
-                                    name: '子菜单二',
-                                    path: '/test1/sonMenu2',
-                                    component: () => import('@/views/test/test1-2/index.vue')
-                              }
-                        ],
+                        name: '技能组合管理',
+                        path: '/skillSet',
+                        component: () => import('@/views/skillSet/index.vue'),
+
+                  },
+
+                  {
+                        name: '技能buf管理',
+                        path: '/skillBuf',
+                        component: () => import('@/views/skillBuf/index.vue'),
+
                   },
                   {
-                        name: '测试二',
-                        path: '/test2',
-                        component: () => import('@/views/test2/index.vue')
+                        name: '人物属性管理',
+                        path: '/characterAttribute',
+                        component: () => import('@/views/characterAttribute/index.vue'),
                   },
-                
+
+
             ]
       },
+      {
+            path: '/login',
+            component: () => import('@/views/login/index.vue')
+      }
 
 ];
 export const router = createRouter({
