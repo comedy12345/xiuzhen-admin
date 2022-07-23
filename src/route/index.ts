@@ -2,14 +2,19 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
       {
-            path: '',
+            path: '/',
             component: () => import('@/views/layout/index.vue'),
-            redirect: '/login',
+            redirect: '/dashboard',
             children: [
                   {
                         name: '首页',
                         path: '/dashboard',
                         component: () => import('@/views/home/index.vue')
+                  },
+                  {
+                        name: '游戏服务',
+                        path: '/gameServices',
+                        component: () => import('@/views/gameServices/index.vue'),
                   },
                   {
                         name: '技能组合管理',
@@ -42,4 +47,4 @@ export const routes: RouteRecordRaw[] = [
 export const router = createRouter({
       history: createWebHashHistory(),
       routes,
-})
+});

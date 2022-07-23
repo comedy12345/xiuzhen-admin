@@ -12,7 +12,7 @@
           </div>
           <a-form labelAlign="left" :label-col="{ span: 4 }">
             <a-form-item label="用户名" name="username">
-              <a-input>
+              <a-input v-model:value="loginData.userName">
                 <template #prefix>
                   <UserOutlined class="site-form-item-icon" />
                 </template>
@@ -20,7 +20,7 @@
             </a-form-item>
 
             <a-form-item label="密码" name="password">
-              <a-input-password>
+              <a-input-password v-model:value="loginData.passwd">
                 <template #prefix>
                   <LockOutlined class="site-form-item-icon" />
                 </template>
@@ -44,10 +44,28 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-const router = useRouter()
-const login = () => { 
-  router.push('/dashboard');
+import { useRouter, useRoute } from 'vue-router';
+import { reactive } from 'vue';
+import { ILoginRequest } from '@/api/login/loginTypes';
+import { reqLogin } from "@/api/login/loginApi";
+import useUserInfoStore from "@/store/userInfo";
+const router = useRouter();
+const route = useRoute();
+const loginData = reactive<ILoginRequest>({
+  userName: '',
+  passwd: '',
+})
+// 登录
+const login = async () => {
+  const { data: { token } } = await reqLogin(loginData);
+  const { login } = useUserInfoStore()
+  login({ token });
+  const redirect = (route.query['redirect'] as string);
+  if (redirect) {
+    router.push(redirect);
+  } else {
+    router.push('/');
+  }
 }
 </script>
 

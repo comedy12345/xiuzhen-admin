@@ -49,6 +49,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .ant-layout {
       height: 100vh !important;
+      overflow: auto;
 
       .sider-header {
             text-align: center;
@@ -80,7 +81,7 @@ export default defineComponent({
             }
 
             .layout-content-main {
-                  padding: 40px;
+                  padding: 20px;
                   background-color: rgba(255, 255, 255, 0.24);
                   height: calc(100vh - 80px);
             }

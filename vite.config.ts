@@ -28,6 +28,15 @@ const serveConfig = {
       '@': resolve(__dirname, 'src'),
     }
   },
+  server:{
+    prot:3000,
+    proxy:{
+      '/api':{
+        target:'http://wj800.com:8080/'
+      }
+    }
+  }
+  
 }
 
 export default defineConfig(({ command, mode }) => {
