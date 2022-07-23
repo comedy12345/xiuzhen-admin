@@ -54,7 +54,8 @@ export const columns: ColumnsType<any> | undefined = [
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        align: 'center'
+        align: 'center',
+        width: 100
     },
 ];
 // 状态下拉框

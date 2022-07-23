@@ -2,8 +2,8 @@
     <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel" ok-text="保存"
         cancel-text="取消" :confirm-loading="confirmLoading">
 
-        <a-form ref="gameServicesFormRef" size="small" :model="gameServicesForm" name="gameServicesForm"
-            autocomplete="off" :label-col="{ span: 6, }">
+        <a-form ref="gameServicesFormRef" :model="gameServicesForm" name="gameServicesForm" autocomplete="off"
+            :label-col="{ span: 6, }">
             <a-form-item label=" 游戏服务名" name="serverName" :rules="[{ required: true, message: '请输入游戏服务名' }]">
                 <a-input v-model:value="gameServicesForm.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>

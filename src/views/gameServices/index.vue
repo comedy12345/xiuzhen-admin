@@ -8,7 +8,7 @@
                     <div class="action">
                         <a-button type="text" @click="editHandle(record)">
                             <template #icon>
-                                <edit-two-tone />
+                                <form-outlined />
                             </template>
                         </a-button>
                         <a-popconfirm placement="leftTop" title="确定要删除这个游戏服务/区服?" ok-text="删除" cancel-text="取消"
@@ -18,7 +18,7 @@
                             </template>
                             <a-button type="text" danger>
                                 <template #icon>
-                                    <delete-two-tone />
+                                    <delete-outlined />
                                 </template>
                             </a-button>
                         </a-popconfirm>

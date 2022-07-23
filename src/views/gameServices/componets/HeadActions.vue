@@ -1,7 +1,6 @@
 <template>
     <div class="hand-action-container">
-        <a-form ref="queryFormRef" layout="inline" :model="queryParameter" size="small" name="queryParameter"
-            autocomplete="off">
+        <a-form ref="queryFormRef" layout="inline" :model="queryParameter" name="queryParameter" autocomplete="off">
             <a-form-item label=" 游戏服务名" name="serverName">
                 <a-input v-model:value="queryParameter!.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>
