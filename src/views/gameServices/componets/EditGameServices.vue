@@ -8,8 +8,11 @@
                 <a-input v-model:value="gameServicesForm.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>
             <a-form-item label="父级游戏服务" name="parentTid">
-                <a-select ref="select" v-model:value="gameServicesForm.parentTid">
+                <a-select ref="select" :loading="selectLoading" v-model:value="gameServicesForm.parentTid"
+                    @focus="handleFocus">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
+                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}
+                    </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="服务状态" name="parentTid">
@@ -24,11 +27,12 @@
     
 <script setup lang='ts'>
 import { ref, defineExpose, defineProps, toRefs, watch, defineEmits } from 'vue';
-import { IGameServicesForm } from '@/api/gameServices/gameServicesTypes';
-import { saveGameServices } from '@/api/gameServices/gameServicesApi';
+import { IGameServicesForm, IGameServicesList } from '@/api/gameServices/gameServicesTypes';
+import { saveGameServices, queryGameServices } from '@/api/gameServices/gameServicesApi';
 import { message } from 'ant-design-vue';
 import { status } from '../config';
 import { runRequst } from '@/utils/ExceptionCapture';
+
 
 // 自定义属性
 const props = defineProps({
@@ -59,12 +63,18 @@ const gameServicesFormRef = ref<any>(null);
 // 保存按钮状态
 const confirmLoading = ref(false);
 
+// 父级游戏服务下拉框loading
+const selectLoading = ref(false);
+
 // 表单初始数据
 const gameServicesForm = ref<IGameServicesForm>({
     parentTid: 0,
     serverName: "",
     stat: 1,
-})
+});
+
+// 父级游戏服务
+const selectData = ref<IGameServicesList[]>();
 
 // 动态展示标题
 const title = ref('新增游戏服务');
@@ -87,7 +97,13 @@ const handleCancel = () => {
     gameServicesFormRef.value.resetFields();
     visible.value = false;
 }
-
+const handleFocus = () => {
+    runRequst(handleQueryGameServices, selectLoading)
+}
+const handleQueryGameServices = async () => {
+    const res = await queryGameServices({ parentTid: 0, size: 10000, current: 1 });
+    selectData.value = res.data.records;
+}
 // 保存游戏服务
 const saveGameServicesHandle = async () => {
     const { data } = await saveGameServices(gameServicesForm.value);
