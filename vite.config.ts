@@ -6,9 +6,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
-// vite在第一次启动时，就能对资源进行预构建
-import OptimizationPersist from 'vite-plugin-optimize-persist'
-import PkgConfig from 'vite-plugin-package-config'
+
 const serveConfig = {
   plugins: [
     vue(),
@@ -19,8 +17,6 @@ const serveConfig = {
         AntDesignVueResolver({ importStyle: true, resolveIcons: true })
       ]
     }),
-    PkgConfig(),
-    OptimizationPersist()
   ],
 
   resolve: {
@@ -28,18 +24,19 @@ const serveConfig = {
       '@': resolve(__dirname, 'src'),
     }
   },
-  server:{
-    prot:3000,
-    proxy:{
-      '/api':{
-        target:'http://wj800.com:8080/'
-      }
-    }
-  }
-  
-}
+  // server: {
+  //   prot: 3000,
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://wj800.com:8080'
+  //     }
+  //   }
+  // }
 
+}
+debugger
 export default defineConfig(({ command, mode }) => {
+
   if (command === 'serve') {
     return {
       ...serveConfig

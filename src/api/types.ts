@@ -22,3 +22,48 @@ export interface IData<T> {
     total?: number;
 
 }
+
+// 通用查询参数
+export interface IBaseQueryParameter {
+
+    // 当前页
+    current?: number;
+
+    // 每页展示条数
+    size?: number;
+
+    // 查询字段数组
+    columns?: IColumns[];
+
+    // 排序字段
+    orderBy?: IOrderBy[];
+}
+
+// 排序字段
+export interface IOrderBy {
+
+    // 排序方向
+    asc: boolean;
+
+    // 排序字段数组
+    fields: string;
+}
+
+// 查询字段
+export interface IColumns {
+    // 查询类型，like模糊查询，eq精确查询
+    func: string;
+
+    // 查询字段名
+    name: string;
+
+    // 查询内容
+    value: any;
+
+}
+
+// 用于查询字段v-model
+export interface IQueryParameter {
+    [key: string]: number;
+}
+

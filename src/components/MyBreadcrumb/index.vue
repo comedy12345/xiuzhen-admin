@@ -5,7 +5,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import { useLayout } from "@/hooks/useLayout";
 export default defineComponent({
       setup() {
-            const { route, routerLinkHander, uuidv4 } = useLayout();
+            const { route, routerLinkHander } = useLayout();
             const collapsed = inject<Ref<boolean>>('collapsed', ref(false));
             const matched = computed(() => route.matched.filter(item => item.path !== ""));
             const pullIn = computed(() => {
@@ -14,7 +14,7 @@ export default defineComponent({
                         : <MenuUnfoldOutlined onClick={() => collapsed.value = false} />
             })
             const breadcrumb = () => (
-                  matched.value.map((item) => <BreadcrumbItem onClick={routerLinkHander(item.path)} key={uuidv4()}>{item.name}</BreadcrumbItem>)
+                  matched.value.map((item) => <BreadcrumbItem onClick={routerLinkHander(item.path)} key={item.path}> {item.name}</BreadcrumbItem >)
             );
             return () => (
                   <div class="my-breadcrumb">

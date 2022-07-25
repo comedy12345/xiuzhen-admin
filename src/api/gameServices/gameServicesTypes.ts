@@ -28,16 +28,3 @@ export interface IGameServicesList {
 
 }
 
-export interface IQueryParameter {
-    // 状态
-    stat?: number;
-    // 服务器名
-    serverName?: string;
-    // 父级服务器ID
-    parentTid?: number;
-    // 当前页
-    current: number;
-    // 每页显示条数
-    size: number;
-
-}

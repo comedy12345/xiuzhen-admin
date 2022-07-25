@@ -1,16 +1,17 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { KEY_USER_INFO_ID, IUserInfo } from "@/store/userInfo";
 import { message } from 'ant-design-vue';
-import { useRouter, useRoute } from "vue-router";
+import useProgressStore from "@/store/progress";
 
-
+const progressStore = useProgressStore();
 const requests = axios.create({
-    baseURL: '/',
+    baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 10000
 });
 
 // 请求拦截
 requests.interceptors.request.use((config: AxiosRequestConfig<any>) => {
+    progressStore.startProgress(true);
     const userInfo = JSON.parse(localStorage.getItem(KEY_USER_INFO_ID) || "{}") as IUserInfo;
     if (userInfo.token) {
         config.headers!['token'] = userInfo.token;
@@ -20,7 +21,6 @@ requests.interceptors.request.use((config: AxiosRequestConfig<any>) => {
 
 // 响应拦截
 requests.interceptors.response.use((resp) => {
-
     const { code, msg } = resp.data;
     if (code === 1) {
         return Promise.resolve(resp);

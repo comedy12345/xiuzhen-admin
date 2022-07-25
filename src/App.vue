@@ -1,12 +1,20 @@
+
 <script lang="tsx">
-import { defineComponent } from 'vue'
-import { RouterView } from 'vue-router'
+import { defineComponent, toRefs } from 'vue';
+import { RouterView } from 'vue-router';
+import { Progress } from 'ant-design-vue';
+import useProgressStore from "@/store/progress";
 export default defineComponent({
   setup() {
+    const progressStore = useProgressStore();
+    const { status, rateOrogress } = toRefs(progressStore);
     return () => (
       <div class="app">
-        <RouterView></RouterView>
-      </div>
+        <>
+          {status?.value && <Progress percent={rateOrogress?.value} strokeWidth={3} show-info={false} />}
+          <RouterView></RouterView>
+        </>
+      </div >
     )
   },
 })
@@ -20,5 +28,13 @@ export default defineComponent({
 body {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif !important;
   font-size: 14px;
+}
+
+.app {
+  .ant-progress {
+    position: absolute;
+    z-index: 1;
+    top: -10px;
+  }
 }
 </style>

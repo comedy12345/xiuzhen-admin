@@ -1,5 +1,5 @@
 import useHttp from "@/hooks/useHttp";
-import { IBaseResp, IData } from "@/api/types";
+import { IBaseQueryParameter, IBaseResp, IData } from "@/api/types";
 import { IGameServicesForm, IGameServicesList, IQueryParameter } from "./gameServicesTypes";
 
 // 保存游戏服务器
@@ -16,11 +16,11 @@ export const saveGameServices = (data: IGameServicesForm) => {
 }
 
 // 查询游戏服务器
-export const queryGameServices = (params: IQueryParameter) => {
+export const queryGameServices = (data: IBaseQueryParameter) => {
     return useHttp<IBaseResp<IData<IGameServicesList[]>>>({
         url: '/api/admin/servers/servers-query',
-        method: "GET",
-        params
+        method: "POST",
+        data
     })
 }
 
