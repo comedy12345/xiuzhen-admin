@@ -1,15 +1,15 @@
 <template>
     <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel" ok-text="保存"
-        cancel-text="取消" :confirm-loading="confirmLoading">
+             cancel-text="取消" :confirm-loading="confirmLoading">
 
         <a-form ref="gameServicesFormRef" :model="gameServicesForm" name="gameServicesForm" autocomplete="off"
-            :label-col="{ span: 6, }">
+                :label-col="{ span: 6, }">
             <a-form-item label=" 游戏服务名" name="serverName" :rules="[{ required: true, message: '请输入游戏服务名' }]">
                 <a-input v-model:value="gameServicesForm.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>
             <a-form-item label="父级游戏服务" name="parentTid">
                 <a-select ref="select" :loading="selectLoading" v-model:value="gameServicesForm.parentTid"
-                    @focus="handleFocus">
+                          @focus="handleFocus">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
                     <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}
                     </a-select-option>
@@ -90,28 +90,23 @@ watch(() => editGameService, () => {
 // 提交表单
 const handleOk = () => {
     gameServicesFormRef.value.validate().then(async () => {
-        runRequst(saveGameServicesHandle, confirmLoading, gameServicesForm.value);
+        const { data } = await saveGameServices(gameServicesForm.value, confirmLoading);
+        gameServicesFormRef.value.resetFields();
+        message.success(data);
+        visible.value = false;
+        emit('success')
+
     });
 }
 const handleCancel = () => {
     gameServicesFormRef.value.resetFields();
     visible.value = false;
 }
-const handleFocus = () => {
-    runRequst(handleQueryGameServices, selectLoading)
-}
-const handleQueryGameServices = async () => {
-    const res = await queryGameServices({ parentTid: 0, size: 10000, current: 1 });
+const handleFocus = async () => {
+    const res = await queryGameServices({ size: 10000, current: 1, columns: [{ func: 'eq', name: 'parentTid', value: 0 }] }, selectLoading);
     selectData.value = res.data.records;
 }
-// 保存游戏服务
-const saveGameServicesHandle = async () => {
-    const { data } = await saveGameServices(gameServicesForm.value);
-    gameServicesFormRef.value.resetFields();
-    message.success(data);
-    visible.value = false;
-    emit('success')
-}
+
 // 提供属性或方法给父级
 defineExpose({
     visible

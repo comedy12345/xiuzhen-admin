@@ -9,15 +9,14 @@
     "build:prod": "vite build --mode production",
     "preview": "vite preview"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",
     "lodash": "^4.17.21",
     "@ant-design/icons-vue": "^6.1.0",
     "ant-design-vue": "^3.2.7",
-    "pinia": "^2.0.14"
-  },
-  "devDependencies": {
+    "pinia": "^2.0.14",
     "@ant-design-vue/babel-plugin-jsx": "^1.0.0-rc.1",
     "@types/node": "^18.0.0",
     "@vitejs/plugin-vue": "^3.0.1",

@@ -1,3 +1,11 @@
+/*
+ * @Description: 进度条状态
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:10:53
+ */
+
 import { defineStore } from 'pinia';
 export interface IProgress {
     status?: boolean,
@@ -26,8 +34,11 @@ const useProgressStore = defineStore({
         },
         endProgress() {
             this.rateOrogress! = 100;
-            this.status = false;
-            this.rateOrogress! = 0;
+            setTimeout(() => {
+                this.status = false;
+                this.rateOrogress! = 0;
+            }, 500);
+
         }
     }
 })

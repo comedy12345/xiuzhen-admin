@@ -1,3 +1,11 @@
+/*
+ * @Description: 路由拦截器
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:44:45
+ */
+
 import { router } from '@/route';
 import { useRouteHistoryStore } from "@/store/routeHistory";
 import useUserInfoStore from "@/store/userInfo";
@@ -5,7 +13,9 @@ import useUserInfoStore from "@/store/userInfo";
 import { Key } from "ant-design-vue/lib/vc-table/interface";
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
+// 白名单
 const whiteList = ['/login'];
+
 
 router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext) => {
       const { $state: { token } } = useUserInfoStore();
@@ -28,7 +38,12 @@ router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext)
       }
 })
 
-// 保存进入的路由历史记录
+/**
+ * @description: 保存进入的路由历史记录
+ * @param to RouteLocationNormalized
+ * @return {*}
+ * @author: ljf
+ */
 const saveRouteHistory = (to: RouteLocationNormalized) => {
       const { $state: { routeHistorys, selectdOpenKeys }, editSelectdOpenKeys } = useRouteHistoryStore();
       getPath("", "", selectdOpenKeys, editSelectdOpenKeys, false, to.path);
@@ -39,15 +54,17 @@ const saveRouteHistory = (to: RouteLocationNormalized) => {
 }
 
 
+
 /**
- * 
+ * @description: 功能描述
  * @param path 父级路径
  * @param currentPath 当前路径
  * @param selectdOpenKeys 缓存中的路径数据
  * @param editSelectdOpenKeys 操作缓存中数据的方法
  * @param flag 用于判断是不是第一次
  * @param toPath 全路径
- * @returns 
+ * @return {*}
+ * @author: ljf
  */
 const getPath = (
       path: string,

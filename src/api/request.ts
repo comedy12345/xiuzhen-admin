@@ -1,3 +1,11 @@
+/*
+ * @Description: 统一请求示例，请求拦截
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:16:28
+ */
+
 import axios, { AxiosRequestConfig } from "axios";
 import { KEY_USER_INFO_ID, IUserInfo } from "@/store/userInfo";
 import { message } from 'ant-design-vue';
@@ -20,8 +28,9 @@ requests.interceptors.request.use((config: AxiosRequestConfig<any>) => {
 })
 
 // 响应拦截
-requests.interceptors.response.use((resp) => {
+requests.interceptors.response.use((resp: { data: { code: number; msg: string; }; }) => {
     const { code, msg } = resp.data;
+    progressStore.endProgress();
     if (code === 1) {
         return Promise.resolve(resp);
     }

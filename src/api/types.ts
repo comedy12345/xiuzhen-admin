@@ -1,3 +1,12 @@
+/*
+ * @Description: 通用类型文件
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:15:31
+ */
+
+
 export interface IBaseResp<T> {
     code: number,
     msg: string,

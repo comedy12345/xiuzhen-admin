@@ -1,8 +1,8 @@
 <template>
     <div class="game-services-container">
-        <HeadActions @success="seaech" :parameterColumn="queryParameter.columns"></HeadActions>
+        <HeadActions @success="getList" :parameterColumn="queryParameter.columns"></HeadActions>
         <a-table :dataSource="tableData?.records" :columns="columns" bordered :pagination="pagination" size="small"
-            :loading="loading" @change="handleTableChange">
+                 :loading="loading" @change="handleTableChange">
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
                     <div class="action">
@@ -12,7 +12,7 @@
                             </template>
                         </a-button>
                         <a-popconfirm placement="leftTop" title="确定要删除这个游戏服务/区服?" ok-text="删除" cancel-text="取消"
-                            @confirm="runRequst(deleteHandle, null, record.tid)">
+                                      @confirm="runRequst(deleteHandle, null, record.tid)">
                             <template #icon>
                                 <question-circle-outlined style="color: red" />
                             </template>
@@ -30,7 +30,7 @@
             </template>
         </a-table>
         <edit-game-services ref='editGameServicesRef' :editGameService="editGameService" type="update"
-            @success="seaech()">
+                            @success="getList">
         </edit-game-services>
     </div>
 
@@ -46,8 +46,7 @@ import { IColumns, IData } from "@/api/types";
 import { TablePaginationConfig, message } from "ant-design-vue";
 import EditGameServices from './componets/EditGameServices.vue';
 import { runRequst } from '@/utils/ExceptionCapture';
-import { IBaseQueryParameter } from '@/api/types'
-console.log(import.meta.env.VITE_BASE_URL);
+import { IBaseQueryParameter } from '@/api/types';
 // 表格加载状态
 let loading = ref(false);
 
@@ -76,17 +75,13 @@ const pagination = computed(() => ({
 // 分页事件
 const handleTableChange = (pagination: TablePaginationConfig) => {
     queryParameter.current = pagination.current!;
-    seaech();
+    getList();
 }
 
 // 查询
-const getList = async () => {
-    if (!queryParameter.columns?.length) {
-        queryParameter.columns = [];
-    }
-
-    loading.value = true;
-    const { data } = await queryGameServices(queryParameter);
+const getList = async (queryColumn?: IColumns[]) => {
+    queryParameter.columns = queryColumn || [];
+    const { data } = await queryGameServices(queryParameter, loading);
     tableData.value = data;
 }
 
@@ -102,13 +97,9 @@ const deleteHandle = async (tid: number) => {
     message.success(data);
     getList();
 }
-const seaech = (queryColumn?: IColumns[]) => {
-    queryParameter.columns = queryColumn!;
-    runRequst(getList, loading);
-}
 
-onMounted(async () => {
-    seaech();
+onMounted(() => {
+    getList();
 })
 
 </script>

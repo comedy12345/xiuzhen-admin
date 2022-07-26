@@ -1,9 +1,24 @@
+/*
+ * @Description: 游戏服务Api
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:31:25
+ */
+
 import useHttp from "@/hooks/useHttp";
 import { IBaseQueryParameter, IBaseResp, IData } from "@/api/types";
-import { IGameServicesForm, IGameServicesList, IQueryParameter } from "./gameServicesTypes";
+import { IGameServicesForm, IGameServicesList } from "./gameServicesTypes";
+import { Ref } from "vue";
 
-// 保存游戏服务器
-export const saveGameServices = (data: IGameServicesForm) => {
+/**
+ * @description: 新增或修改游戏服务
+ * @param {IGameServicesForm} data 
+ * @param {Ref} loading
+ * @return {*} Promise<IBaseResp<any>>
+ * @author: ljf
+ */
+export const saveGameServices = (data: IGameServicesForm, loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
     let url = "/api/admin/servers/servers-add";
     if (data.tid) {
         url = '/api/admin/servers/servers-update';
@@ -11,24 +26,39 @@ export const saveGameServices = (data: IGameServicesForm) => {
     return useHttp<IBaseResp<any>>({
         url,
         method: "POST",
-        data
+        data,
+        loading
     })
 }
 
-// 查询游戏服务器
-export const queryGameServices = (data: IBaseQueryParameter) => {
+/**
+ * @description: 查询游戏服务器
+ * @param {IBaseQueryParameter} data
+ * @param {Ref} loading
+ * @return {*} Promise<IBaseResp<IData<IGameServicesList[]>>>
+ * @author: ljf
+ */
+export const queryGameServices = (data: IBaseQueryParameter, loading?: Ref<boolean>): Promise<IBaseResp<IData<IGameServicesList[]>>> => {
     return useHttp<IBaseResp<IData<IGameServicesList[]>>>({
         url: '/api/admin/servers/servers-query',
         method: "POST",
-        data
+        data,
+        loading
     })
 }
 
-// 删除游戏服务器
-export const deleteGameServices = (tid: number) => {
+/**
+ * @description: 删除游戏服务器
+ * @param {number} tid
+ * @param {Ref} loading
+ * @return {*} Promise<IBaseResp<any>>
+ * @author: ljf
+ */
+export const deleteGameServices = (tid: number, loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
     return useHttp<IBaseResp<any>>({
         url: '/api/admin/servers/servers-remove',
         method: "GET",
-        params: { tid }
+        params: { tid },
+        loading
     })
 }

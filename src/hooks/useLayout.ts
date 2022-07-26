@@ -1,5 +1,18 @@
+/*
+ * @Description: 面包屑进入导航，和关闭面包屑Hook
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:41:46
+ */
+
 import { useRouteHistoryStore } from "@/store/routeHistory";
 import { useRoute, useRouter } from "vue-router";
+/**
+ * @description: 返回面包屑需要的方法
+ * @return {*}
+ * @author: ljf
+ */
 export function useLayout() {
       const route = useRoute();
       const router = useRouter();

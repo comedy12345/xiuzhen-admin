@@ -1,3 +1,11 @@
+/*
+ * @Description: 存储路由历史和当前打开路由
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:45
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 10:09:40
+ */
+
 import { defineStore } from 'pinia';
 import { Key } from "ant-design-vue/lib/vc-table/interface";
 
