@@ -1,3 +1,10 @@
+<!--
+ * @Description: 文件描述
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 11:42:01
+-->
 <template>
     <div class="hand-action-container">
         <a-form ref="queryFormRef" layout="inline" name="queryParameter" autocomplete="off">
@@ -6,7 +13,7 @@
             </a-form-item>
             <a-form-item label="父级游戏服务" name="parentTid">
                 <a-select ref="select" v-model:value="queryForm.parentTid" :loading="selectLoading"
-                    placeholder="请选择游戏服务" style="width: 150px;" @focus="handleFocus">
+                          placeholder="请选择游戏服务" style="width: 150px;" @focus="handleFocus">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
                     <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}
                     </a-select-option>
@@ -18,7 +25,7 @@
                 </a-select>
             </a-form-item>
             <a-form-item>
-                <a-button type="primary" @click="emit('success', queryParameterColumn)" ghost>
+                <a-button type="primary" @click="emit('refresh-table', queryParameterColumn)" ghost>
                     <template #icon>
                         <SearchOutlined />
                     </template>
@@ -44,45 +51,40 @@
         </a-form>
 
     </div>
-    <edit-game-services ref='editGameServicesRef' @success="emit('success')">
+    <edit-game-services ref='editGameServicesRef' @success="emit('refresh-table')">
     </edit-game-services>
 </template>
 
 <script lang="ts" setup>
 import { IGameServicesList } from "@/api/gameServices/gameServicesTypes";
-import { ref, defineEmits, defineProps, toRefs, reactive, watch, watchEffect } from "vue";
+import { ref } from "vue";
 import EditGameServices from './EditGameServices.vue';
 import { status } from '../config'
 import { runRequst } from "@/utils/ExceptionCapture";
 import { queryGameServices } from "@/api/gameServices/gameServicesApi";
-import useQueryParameter from '@/hooks/queryParameter'
-// 自定义事件
-const emit = defineEmits(['success']);
+import useQueryParameter from '@/hooks/queryParameter';
+
+const emit = defineEmits(['refresh-table']);
 
 // 收集查询参数
 const { queryForm, queryParameterColumn } = useQueryParameter();
 
 
-// 查询表单ref
 const queryFormRef = ref<any>(null);
 
-// 编辑框Ref
 const editGameServicesRef = ref<any>(null);
 
-// 父级游戏服务下拉框loading
 const selectLoading = ref(false);
 
-// 父级游戏服务
+// 父级游戏服务数据
 const selectData = ref<IGameServicesList[]>();
 
 
-// 重置
 const reset = () => {
     queryFormRef.value.resetFields();
-    emit('success', queryParameterColumn.value)
+    emit('refresh-table', queryParameterColumn.value)
 }
 
-// 新增
 const add = () => {
     editGameServicesRef.value.visible = true;
 }

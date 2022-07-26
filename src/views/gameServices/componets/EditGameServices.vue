@@ -26,15 +26,12 @@
 </template>
     
 <script setup lang='ts'>
-import { ref, defineExpose, defineProps, toRefs, watch, defineEmits } from 'vue';
+import { ref, toRefs, watch } from 'vue';
 import { IGameServicesForm, IGameServicesList } from '@/api/gameServices/gameServicesTypes';
 import { saveGameServices, queryGameServices } from '@/api/gameServices/gameServicesApi';
 import { message } from 'ant-design-vue';
 import { status } from '../config';
-import { runRequst } from '@/utils/ExceptionCapture';
 
-
-// 自定义属性
 const props = defineProps({
     editGameService: {
         type: Object as () => IGameServicesForm,
@@ -49,21 +46,16 @@ const props = defineProps({
     }
 });
 
-// 自定义事件
-const emit = defineEmits(['success'])
+const emit = defineEmits(['refresh-table'])
 
 const { editGameService, type } = toRefs(props);
 
-// 模态框显示隐藏状态
 const visible = ref(false);
 
-// 编辑form表单ref
 const gameServicesFormRef = ref<any>(null);
 
-// 保存按钮状态
 const confirmLoading = ref(false);
 
-// 父级游戏服务下拉框loading
 const selectLoading = ref(false);
 
 // 表单初始数据
@@ -76,7 +68,6 @@ const gameServicesForm = ref<IGameServicesForm>({
 // 父级游戏服务
 const selectData = ref<IGameServicesList[]>();
 
-// 动态展示标题
 const title = ref('新增游戏服务');
 if (type.value === 'update') {
     title.value = '修改游戏服务';
@@ -87,27 +78,27 @@ watch(() => editGameService, () => {
     gameServicesForm.value = { ...editGameService.value }
 }, { deep: true })
 
-// 提交表单
 const handleOk = () => {
     gameServicesFormRef.value.validate().then(async () => {
         const { data } = await saveGameServices(gameServicesForm.value, confirmLoading);
         gameServicesFormRef.value.resetFields();
         message.success(data);
         visible.value = false;
-        emit('success')
+        emit('refresh-table')
 
     });
 }
+
 const handleCancel = () => {
     gameServicesFormRef.value.resetFields();
     visible.value = false;
 }
+
 const handleFocus = async () => {
     const res = await queryGameServices({ size: 10000, current: 1, columns: [{ func: 'eq', name: 'parentTid', value: 0 }] }, selectLoading);
     selectData.value = res.data.records;
 }
 
-// 提供属性或方法给父级
 defineExpose({
     visible
 })

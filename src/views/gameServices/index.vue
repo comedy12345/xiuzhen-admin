@@ -1,6 +1,6 @@
 <template>
     <div class="game-services-container">
-        <HeadActions @success="getList" :parameterColumn="queryParameter.columns"></HeadActions>
+        <HeadActions @refresh-table="getList" :parameterColumn="queryParameter.columns"></HeadActions>
         <a-table :dataSource="tableData?.records" :columns="columns" bordered :pagination="pagination" size="small"
                  :loading="loading" @change="handleTableChange">
             <template #bodyCell="{ column, record }">
@@ -30,7 +30,7 @@
             </template>
         </a-table>
         <edit-game-services ref='editGameServicesRef' :editGameService="editGameService" type="update"
-                            @success="getList">
+                            @refresh-table="getList">
         </edit-game-services>
     </div>
 

@@ -1,3 +1,10 @@
+/*
+ * @Description: 文件描述
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:45
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-07-26 11:14:44
+ */
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vuejsx from '@vitejs/plugin-vue-jsx';
@@ -36,7 +43,7 @@ const serveConfig = {
 }
 debugger
 export default defineConfig(({ command, mode }) => {
-
+  console.log(command)
   if (command === 'serve') {
     return {
       ...serveConfig
@@ -49,6 +56,7 @@ export default defineConfig(({ command, mode }) => {
         rollupOptions: {
           output: {
             manualChunks: (id) => {
+
               if (id.includes('node_modules')) {
                 return id.toString().split('node_modules/')[1].split('/')[0].toString();
               }
