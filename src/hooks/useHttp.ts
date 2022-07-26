@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:40:11
+ * @LastEditTime: 2022-07-26 10:53:50
  */
 
 import { Method } from "axios";
@@ -20,7 +20,7 @@ export interface HttpConfig {
 
 /**
  * @description: HTTP请求hook,使用泛型定义返回的数据类型,使用接口定义请求参数
- * @param {HttpConfig} 请求能传的参数
+ * @param {HttpConfig} config  
  * @return {*} Promise<T>
  * @author: ljf
  */

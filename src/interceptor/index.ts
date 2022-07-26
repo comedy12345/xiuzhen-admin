@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:44:45
+ * @LastEditTime: 2022-07-26 10:55:28
  */
 
 import { router } from '@/route';
@@ -40,7 +40,7 @@ router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext)
 
 /**
  * @description: 保存进入的路由历史记录
- * @param to RouteLocationNormalized
+ * @param {RouteLocationNormalized} to
  * @return {*}
  * @author: ljf
  */
@@ -57,12 +57,12 @@ const saveRouteHistory = (to: RouteLocationNormalized) => {
 
 /**
  * @description: 功能描述
- * @param path 父级路径
- * @param currentPath 当前路径
- * @param selectdOpenKeys 缓存中的路径数据
- * @param editSelectdOpenKeys 操作缓存中数据的方法
- * @param flag 用于判断是不是第一次
- * @param toPath 全路径
+ * @param {string} path 父级路径
+ * @param {string} currentPath 当前路径
+ * @param {Key[]} selectdOpenKeys 缓存中的路径数据
+ * @param {Function} editSelectdOpenKeys 操作缓存中数据的方法
+ * @param {boolean} flag 用于判断是不是第一次
+ * @param {string} toPath 全路径
  * @return {*}
  * @author: ljf
  */
