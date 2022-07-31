@@ -6,7 +6,7 @@
  * @LastEditTime: 2022-07-26 10:34:19
  */
 
-import { IColumns, IQueryParameter } from "@/api/types";
+import { IColumns, IQueryParameter } from "@/interface/types";
 import { reactive, ref, watch } from "vue";
 
 /**

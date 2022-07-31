@@ -12,9 +12,7 @@ import useUserInfoStore from "@/store/userInfo";
 
 import { Key } from "ant-design-vue/lib/vc-table/interface";
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-
-// 白名单
-const whiteList = ['/login'];
+import { NoAuthentication, doNotShow } from '@/config/routeExclusion';
 
 
 router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext) => {
@@ -22,15 +20,16 @@ router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext)
       if (token) {
             // 有token,当前页为登录页就跳转
             if (to.path === '/login') {
-                  saveRouteHistory(to);
                   next({ path: '/' })
             } else {
+
                   saveRouteHistory(to);
                   next()
             }
       } else {
             /* has no token*/
-            if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
+            if (NoAuthentication.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
+                  !doNotShow.some(doNotShowItem => to.path.includes(doNotShowItem)) && saveRouteHistory(to);
                   next();
             } else {
                   next(`/login?redirect=${to.path}`); // 否则全部重定向到登录页

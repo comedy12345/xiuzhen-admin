@@ -7,7 +7,7 @@
  */
 
 import { Method } from "axios";
-import request from "@/api/request";
+import request from "@/utils/request";
 import { Ref } from "vue";
 export interface HttpConfig {
     url: string;

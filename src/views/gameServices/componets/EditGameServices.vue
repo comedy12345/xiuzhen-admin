@@ -8,8 +8,7 @@
                 <a-input v-model:value="gameServicesForm.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>
             <a-form-item label="父级游戏服务" name="parentTid">
-                <a-select ref="select" :loading="selectLoading" v-model:value="gameServicesForm.parentTid"
-                          @focus="handleFocus">
+                <a-select ref="select" :loading="selectLoading" v-model:value="gameServicesForm.parentTid">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
                     <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}
                     </a-select-option>
@@ -26,13 +25,13 @@
 </template>
     
 <script setup lang='ts'>
-import { ref, toRefs, watch } from 'vue';
-import { IGameServicesForm, IGameServicesList } from '@/api/gameServices/gameServicesTypes';
+import { onMounted, ref, toRefs, watch } from 'vue';
+import { IGameServicesForm, IGameServicesList } from '@/interface/gameServicesTypes';
 import { saveGameServices, queryGameServices } from '@/api/gameServices/gameServicesApi';
 import { message } from 'ant-design-vue';
-import { status } from '../config';
+import { status } from '@/config/gameServicesConfig';
 
-const props = defineProps({
+const { editGameService, type } = defineProps({
     editGameService: {
         type: Object as () => IGameServicesForm,
         default: () => ({
@@ -46,9 +45,11 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['refresh-table'])
+const emit = defineEmits(['refresh-table']);
+onMounted(() => {
+    handleFocus();
+})
 
-const { editGameService, type } = toRefs(props);
 
 const visible = ref(false);
 
@@ -69,13 +70,13 @@ const gameServicesForm = ref<IGameServicesForm>({
 const selectData = ref<IGameServicesList[]>();
 
 const title = ref('新增游戏服务');
-if (type.value === 'update') {
+if (type === 'update') {
     title.value = '修改游戏服务';
 }
 
 // 编辑回显
 watch(() => editGameService, () => {
-    gameServicesForm.value = { ...editGameService.value }
+    gameServicesForm.value = { ...editGameService }
 }, { deep: true })
 
 const handleOk = () => {
@@ -85,7 +86,6 @@ const handleOk = () => {
         message.success(data);
         visible.value = false;
         emit('refresh-table')
-
     });
 }
 

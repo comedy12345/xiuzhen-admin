@@ -28,6 +28,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .my-route-tag {
       height: 30px;
+      display: flex;
 
       .ant-tag {
             height: 26px;

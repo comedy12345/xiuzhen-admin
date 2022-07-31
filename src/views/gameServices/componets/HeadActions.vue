@@ -7,7 +7,7 @@
 -->
 <template>
     <div class="hand-action-container">
-        <a-form ref="queryFormRef" layout="inline" name="queryParameter" autocomplete="off">
+        <a-form ref="queryFormRef" layout="inline" name="queryParameter" autocomplete="off" :model="queryForm">
             <a-form-item label=" 游戏服务名" name="serverName">
                 <a-input placeholder="请输入游戏服务名" v-model:value="queryForm.serverName" />
             </a-form-item>
@@ -19,13 +19,13 @@
                     </a-select-option>
                 </a-select>
             </a-form-item>
-            <a-form-item label="服务状态" name="parentTid">
+            <a-form-item label="服务状态" name="stat">
                 <a-select ref="select" v-model:value="queryForm.stat" placeholder="请选择服务状态" style="width: 150px;">
                     <a-select-option v-for="{ value, text } in status" :value="value">{{ text }}</a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item>
-                <a-button type="primary" @click="emit('refresh-table', queryParameterColumn)" ghost>
+                <a-button type="primary" @click="emit('refresh-table', queryParameterColumn)">
                     <template #icon>
                         <SearchOutlined />
                     </template>
@@ -41,7 +41,7 @@
                 </a-button>
             </a-form-item>
             <a-form-item>
-                <a-button type="primary" @click="add" ghost>
+                <a-button type="primary" @click="add">
                     <template #icon>
                         <plus-circle-outlined />
                     </template>
@@ -56,10 +56,10 @@
 </template>
 
 <script lang="ts" setup>
-import { IGameServicesList } from "@/api/gameServices/gameServicesTypes";
+import { IGameServicesList } from "@/interface/gameServicesTypes";
 import { ref } from "vue";
 import EditGameServices from './EditGameServices.vue';
-import { status } from '../config'
+import { status } from '../../../config/gameServicesConfig'
 import { runRequst } from "@/utils/ExceptionCapture";
 import { queryGameServices } from "@/api/gameServices/gameServicesApi";
 import useQueryParameter from '@/hooks/queryParameter';
@@ -82,6 +82,7 @@ const selectData = ref<IGameServicesList[]>();
 
 const reset = () => {
     queryFormRef.value.resetFields();
+    debugger
     emit('refresh-table', queryParameterColumn.value)
 }
 
@@ -100,6 +101,9 @@ const handleQueryGameServices = async () => {
 
 <style lang="scss" scoped>
 .hand-action-container {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
 }
 </style>

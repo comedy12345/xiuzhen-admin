@@ -46,7 +46,7 @@
 <script lang="ts" setup>
 import { useRouter, useRoute } from 'vue-router';
 import { reactive } from 'vue';
-import { ILoginRequest } from '@/api/login/loginTypes';
+import { ILoginRequest } from '@/interface/loginTypes';
 import { reqLogin } from "@/api/login/loginApi";
 import useUserInfoStore from "@/store/userInfo";
 const router = useRouter();

@@ -1,9 +1,10 @@
 
 <script lang="tsx">
 import { defineComponent, toRefs } from 'vue';
-import { RouterView } from 'vue-router';
 import { Progress } from 'ant-design-vue';
+// import Layout from "@/views/layout/index.vue";
 import useProgressStore from "@/store/progress";
+import { RouterView } from "vue-router";
 export default defineComponent({
   setup() {
     const progressStore = useProgressStore();

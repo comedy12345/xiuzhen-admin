@@ -15,13 +15,14 @@ export const columns: ColumnsType<any> | undefined = [
         align: 'center'
     },
     {
-        title: '父级游戏服务ID',
+        title: '父级服务',
         dataIndex: 'parentTid',
         key: 'parentTid',
-        align: 'center'
+        align: 'center',
+        width: 150
     },
     {
-        title: '游戏服务状态',
+        title: '状态',
         dataIndex: 'stat',
         key: 'stat',
         align: 'center'
@@ -30,19 +31,22 @@ export const columns: ColumnsType<any> | undefined = [
         title: '创建时间',
         dataIndex: 'createAt',
         key: 'createAt',
-        align: 'center'
+        align: 'center',
+        width: 150
     },
     {
         title: '修改时间',
         dataIndex: 'updateAt',
         key: 'updateAt',
-        align: 'center'
+        align: 'center',
+        width: 150
     },
     {
         title: '创建人',
         dataIndex: 'createBy',
         key: 'createBy',
-        align: 'center'
+        align: 'center',
+        width: 70
     },
     {
         title: '修改人',

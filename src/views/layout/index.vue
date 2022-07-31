@@ -28,7 +28,7 @@ export default defineComponent({
                                     <Menu mode="inline" theme='dark'
                                           selectedKeys={[route.path]} openKeys={selectdOpenKeys}
                                           onOpenChange={(openKeys: Key[]) => editSelectdOpenKeys(openKeys, "upd")}>
-                                          <MyMenuItem routesMenu={routes[0].children!} />
+                                          <MyMenuItem routesMenu={routes[0].children} />
                                     </Menu>
                               </LayoutSider>
                               <LayoutContent class="layout-content">
@@ -49,7 +49,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .ant-layout {
       height: 100vh !important;
-      overflow: auto;
 
       .sider-header {
             text-align: center;
@@ -81,9 +80,21 @@ export default defineComponent({
             }
 
             .layout-content-main {
-                  padding: 20px;
                   background-color: rgba(255, 255, 255, 0.24);
                   height: calc(100vh - 80px);
+                  overflow-y: scroll;
+                  padding: 20px;
+
+                  :deep(.ant-table-wrapper) {
+
+                        .ant-table-thead {
+                              th {
+                                    font-weight: bold;
+                                    font-size: 16px;
+                              }
+                        }
+
+                  }
             }
 
       }

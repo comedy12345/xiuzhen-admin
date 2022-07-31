@@ -2,14 +2,15 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
       {
+            name: '首页',
             path: '/',
-            component: () => import('@/views/layout/index.vue'),
             redirect: '/dashboard',
+            component: () => import('@/views/layout/index.vue'),
             children: [
                   {
                         name: '首页',
                         path: '/dashboard',
-                        component: () => import('@/views/home/index.vue')
+                        component: () => import('@/views/gameServices/index.vue'),
                   },
                   {
                         name: '游戏服务',
@@ -17,30 +18,23 @@ export const routes: RouteRecordRaw[] = [
                         component: () => import('@/views/gameServices/index.vue'),
                   },
                   {
-                        name: '技能组合管理',
-                        path: '/skillSet',
-                        component: () => import('@/views/skillSet/index.vue'),
+                        name: '技能管理',
+                        path: '/skill',
+                        component: () => import('@/views/skill/index.vue'),
 
                   },
-
                   {
                         name: '技能buf管理',
-                        path: '/skillBuf',
+                        path: '/skillBuf/:skillId',
                         component: () => import('@/views/skillBuf/index.vue'),
 
                   },
-                  {
-                        name: '人物属性管理',
-                        path: '/characterAttribute',
-                        component: () => import('@/views/characterAttribute/index.vue'),
-                  },
-
-
             ]
       },
+
       {
             path: '/login',
-            component: () => import('@/views/login/index.vue')
+            component: () => import('@/views/login/index.vue'),
       }
 
 ];

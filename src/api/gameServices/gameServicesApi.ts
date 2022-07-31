@@ -7,8 +7,8 @@
  */
 
 import useHttp from "@/hooks/useHttp";
-import { IBaseQueryParameter, IBaseResp, IData } from "@/api/types";
-import { IGameServicesForm, IGameServicesList } from "./gameServicesTypes";
+import { IBaseQueryParameter, IBaseResp, IData } from "@/interface/types";
+import { IGameServicesForm, IGameServicesList } from "../../interface/gameServicesTypes";
 import { Ref } from "vue";
 
 /**
