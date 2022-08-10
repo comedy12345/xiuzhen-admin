@@ -74,7 +74,18 @@ const GameServicesTable = defineComponent({
                     </div>
                 )
             } else if (column.key === 'stat') {
-                return <>{status[record.stat!] && status[record.stat!].text}</>
+                switch (record.stat) {
+                    case 0:
+                        return <><a-badge status="error" />{status[record.stat!] && status[record.stat!].text}</>
+                    case 1:
+                        return <><a-badge status="success" />{status[record.stat!] && status[record.stat!].text}</>
+                    case 2:
+                        return <><a-badge status="processing" />{status[record.stat!] && status[record.stat!].text}</>
+                    case 3:
+                        return <><a-badge status="default" />{status[record.stat!] && status[record.stat!].text}</>
+                    default:
+                        break;
+                }
             }
             return <>{record[key]}</>
         }
@@ -134,6 +145,13 @@ const GameServicesTable = defineComponent({
             return <GameServicesTable isChildren={true} parentTid={obj.record.tid}></GameServicesTable>
         }
 
+        // table插槽
+        const childrenSlot = {
+            bodyCell: (scope: tableScope) => actionBox(scope),
+            customFilterDropdown: (props: FilterDropdownProps<ColumnType>) => columnQueryBox(props),
+        } as any
+        !isChildren.value && (childrenSlot.expandedRowRender = (obj: any) => childrenTable(obj))
+
         return () => (
             <>
                 {isChildren.value || <HeadActions onRefreshTable={() => getList()} ></HeadActions>}
@@ -150,12 +168,8 @@ const GameServicesTable = defineComponent({
                         sticky={{ offsetHeader: -21 }}
                         scroll={{ x: true }}
                         onChange={(pagination: TablePaginationConfig) => handleTableChange(pagination)}
+                        v-slots={childrenSlot}
                     >
-                        {{
-                            bodyCell: (scope: tableScope) => actionBox(scope),
-                            customFilterDropdown: (props: FilterDropdownProps<ColumnType>) => columnQueryBox(props),
-                            expandedRowRender: (obj: any) => childrenTable(obj)
-                        }}
                     </Table>
                     {editGameServicesBox()}
                 </div>
