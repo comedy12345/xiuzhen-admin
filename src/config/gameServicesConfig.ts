@@ -1,7 +1,8 @@
-import { ColumnsType } from "ant-design-vue/lib/table/Table";
+import { TableColumnType } from "ant-design-vue";
+
 
 // 表格字段
-export const columns: ColumnsType<any> | undefined = [
+export const columns: TableColumnType[] = [
     {
         title: '自增编号',
         dataIndex: 'tid',
@@ -9,10 +10,11 @@ export const columns: ColumnsType<any> | undefined = [
         align: 'center'
     },
     {
-        title: '服务器/区名称',
+        title: '区名称',
         dataIndex: 'serverName',
         key: 'serverName',
-        align: 'center'
+        align: 'center',
+        customFilterDropdown: true,
     },
     {
         title: '父级服务',
@@ -25,7 +27,9 @@ export const columns: ColumnsType<any> | undefined = [
         title: '状态',
         dataIndex: 'stat',
         key: 'stat',
-        align: 'center'
+        align: 'center',
+        customFilterDropdown: true,
+
     },
     {
         title: '创建时间',

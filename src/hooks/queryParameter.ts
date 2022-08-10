@@ -21,7 +21,7 @@ export default function useQueryParameter() {
     watch(() => queryForm, () => {
         queryParameterColumn.value = [];
         Object.keys(queryForm).forEach(name => {
-            queryParameterColumn.value.push({ func: 'eq', name, value: queryForm[name] })
+            queryForm[name] && queryParameterColumn.value.push({ func: 'eq', name, value: queryForm[name] })
         });
     }, { deep: true });
     return {

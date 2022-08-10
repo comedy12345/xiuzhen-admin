@@ -10,7 +10,7 @@ export const routes: RouteRecordRaw[] = [
                   {
                         name: '首页',
                         path: '/dashboard',
-                        component: () => import('@/views/gameServices/index.vue'),
+                        component: () => import('@/views/home/index.vue'),
                   },
                   {
                         name: '游戏服务',
@@ -27,6 +27,18 @@ export const routes: RouteRecordRaw[] = [
                         name: '技能buf管理',
                         path: '/skillBuf/:skillId',
                         component: () => import('@/views/skillBuf/index.vue'),
+
+                  },
+                  {
+                        name: '用户管理',
+                        path: '/user',
+                        component: () => import('@/views/user/index.vue'),
+
+                  },
+                  {
+                        name: '伙伴管理',
+                        path: '/partner',
+                        component: () => import('@/views/partner/index.vue'),
 
                   },
             ]

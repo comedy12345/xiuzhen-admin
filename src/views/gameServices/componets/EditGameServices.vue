@@ -1,22 +1,29 @@
 <template>
-    <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel" ok-text="保存"
+    <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel"
+             ok-text="保存"
              cancel-text="取消" :confirm-loading="confirmLoading">
 
-        <a-form ref="gameServicesFormRef" :model="gameServicesForm" name="gameServicesForm" autocomplete="off"
+        <a-form ref="gameServicesFormRef" :model="gameServicesForm" name="gameServicesForm"
+                autocomplete="off"
                 :label-col="{ span: 6, }">
-            <a-form-item label=" 游戏服务名" name="serverName" :rules="[{ required: true, message: '请输入游戏服务名' }]">
+            <a-form-item label=" 游戏服务名" name="serverName"
+                         :rules="[{ required: true, message: '请输入游戏服务名' }]">
                 <a-input v-model:value="gameServicesForm.serverName" placeholder="请输入游戏服务名" />
             </a-form-item>
             <a-form-item label="父级游戏服务" name="parentTid">
-                <a-select ref="select" :loading="selectLoading" v-model:value="gameServicesForm.parentTid">
+                <a-select ref="select" :loading="selectLoading"
+                          v-model:value="gameServicesForm.parentTid">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
-                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}
+                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{
+                            serverName
+                    }}
                     </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="服务状态" name="parentTid">
                 <a-select ref="select" v-model:value="gameServicesForm.stat">
-                    <a-select-option v-for="{ value, text } in status" :value="value">{{ text }}</a-select-option>
+                    <a-select-option v-for="{ value, text } in status" :value="value">{{ text }}
+                    </a-select-option>
                 </a-select>
             </a-form-item>
         </a-form>
@@ -31,7 +38,7 @@ import { saveGameServices, queryGameServices } from '@/api/gameServices/gameServ
 import { message } from 'ant-design-vue';
 import { status } from '@/config/gameServicesConfig';
 
-const { editGameService, type } = defineProps({
+const props = defineProps({
     editGameService: {
         type: Object as () => IGameServicesForm,
         default: () => ({
@@ -44,6 +51,7 @@ const { editGameService, type } = defineProps({
         default: 'add'
     }
 });
+const { editGameService, type } = toRefs(props)
 
 const emit = defineEmits(['refresh-table']);
 onMounted(() => {
@@ -70,13 +78,13 @@ const gameServicesForm = ref<IGameServicesForm>({
 const selectData = ref<IGameServicesList[]>();
 
 const title = ref('新增游戏服务');
-if (type === 'update') {
+if (type.value === 'update') {
     title.value = '修改游戏服务';
 }
 
 // 编辑回显
 watch(() => editGameService, () => {
-    gameServicesForm.value = { ...editGameService }
+    gameServicesForm.value = { ...editGameService.value }
 }, { deep: true })
 
 const handleOk = () => {

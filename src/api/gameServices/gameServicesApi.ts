@@ -38,7 +38,8 @@ export const saveGameServices = (data: IGameServicesForm, loading?: Ref<boolean>
  * @return {*} Promise<IBaseResp<IData<IGameServicesList[]>>>
  * @author: ljf
  */
-export const queryGameServices = (data: IBaseQueryParameter, loading?: Ref<boolean>): Promise<IBaseResp<IData<IGameServicesList[]>>> => {
+export const queryGameServices = (data: IBaseQueryParameter, loading?: Ref<boolean>)
+    : Promise<IBaseResp<IData<IGameServicesList[]>>> => {
     return useHttp<IBaseResp<IData<IGameServicesList[]>>>({
         url: '/api/admin/servers/servers-query',
         method: "POST",

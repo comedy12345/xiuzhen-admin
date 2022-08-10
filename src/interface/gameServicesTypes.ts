@@ -1,10 +1,10 @@
 // 编辑游戏服务
 export interface IGameServicesForm {
     tid?: number;
-    parentTid: number;
-    serverName: string;
+    parentTid?: number;
+    serverName?: string;
     // 状态 默认1 开启 0 关闭 2 更新 3维护
-    stat: number;
+    stat?: number;
 }
 
 // 游戏服务列表
@@ -25,6 +25,8 @@ export interface IGameServicesList {
     createBy?: string;
     // 修改人
     updateBy?: string;
+
+    children?: IGameServicesList[]
 
 }
 

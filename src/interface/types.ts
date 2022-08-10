@@ -42,7 +42,7 @@ export interface IBaseQueryParameter {
     size?: number;
 
     // 查询字段数组
-    columns?: IColumns[];
+    columns?: IColumn[];
 
     // 排序字段
     orderBy?: IOrderBy[];
@@ -59,7 +59,7 @@ export interface IOrderBy {
 }
 
 // 查询字段
-export interface IColumns {
+export interface IColumn {
     // 查询类型，like模糊查询，eq精确查询
     func: string;
 
