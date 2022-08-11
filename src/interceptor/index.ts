@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:55:28
+ * @LastEditTime: 2022-08-11 14:27:01
  */
 
 import { router } from '@/route';
@@ -55,7 +55,7 @@ const saveRouteHistory = (to: RouteLocationNormalized) => {
 
 
 /**
- * @description: 功能描述
+ * @description: 选中或展开当前菜单（不知道有没有简单方法，后期再优化）
  * @param {string} path 父级路径
  * @param {string} currentPath 当前路径
  * @param {Key[]} selectdOpenKeys 缓存中的路径数据

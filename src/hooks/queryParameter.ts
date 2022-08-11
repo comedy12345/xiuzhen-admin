@@ -3,10 +3,10 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:34:19
+ * @LastEditTime: 2022-08-11 14:21:30
  */
 
-import { IColumns, IQueryParameter } from "@/interface/types";
+import { IColumn, IQueryParameter } from "@/interface/types";
 import { reactive, ref, watch } from "vue";
 
 /**
@@ -17,7 +17,7 @@ import { reactive, ref, watch } from "vue";
 export default function useQueryParameter() {
     const queryForm = reactive<IQueryParameter>({});
     // 保存最新查询参数
-    const queryParameterColumn = ref<IColumns[]>([]);
+    const queryParameterColumn = ref<IColumn[]>([]);
     watch(() => queryForm, () => {
         queryParameterColumn.value = [];
         Object.keys(queryForm).forEach(name => {
