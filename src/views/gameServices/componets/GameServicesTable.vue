@@ -1,21 +1,26 @@
+<!--
+ * @Description: 游戏服务表格组件
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-11 13:52:15
+-->
+
 <script lang="tsx">
 import { IGameServicesList } from "@/interface/gameServicesTypes";
-import { Table, Button, Popconfirm, RadioGroup, Radio, Input } from "ant-design-vue";
-import { defineComponent, toRefs } from "vue";
-import { status } from "@/config/gameServicesConfig";
-import { FilterDropdownProps, TablePaginationConfig } from "ant-design-vue/es/table/interface";
+import { FilterDropdownProps, TablePaginationConfig, ColumnType } from "ant-design-vue/es/table/interface";
+import { Table, Button, Popconfirm, RadioGroup, Input, RadioButton, Badge, Space } from "ant-design-vue";
 import QueryFooter from '@/components/QueryFooter/index.vue';
-import useGameServicesTable from "../hooks/GameServicesTableHook";
 import EditGameServices from './EditGameServices.vue';
 import HeadActions from "./HeadActions.vue";
-import { columns } from '@/config/gameServicesConfig';
-import { computed } from "@vue/reactivity";
-import { ColumnType } from "ant-design-vue/lib/table";
+import useGameServicesTable from "../hooks/GameServicesTableHook";
+import { defineComponent, toRefs, computed } from "vue";
 import { cloneDeep } from 'lodash';
+import { status } from "@/config/gameServicesConfig";
+import { columns } from '@/config/gameServicesConfig';
 type tableScope = { column: ColumnType<any>, record: IGameServicesList };
 const GameServicesTable = defineComponent({
     props: {
-
         isChildren: {
             type: Boolean,
             default: false
@@ -26,8 +31,7 @@ const GameServicesTable = defineComponent({
         }
     },
 
-    setup(props, context) {
-
+    setup(props) {
         const { isChildren, parentTid } = toRefs(props);
         const {
             tableData,
@@ -43,14 +47,15 @@ const GameServicesTable = defineComponent({
             getList
         } = useGameServicesTable(parentTid.value);
 
-        const filterColumns: any = computed(() => {
+        // 过滤table字段
+        const filterColumns = computed(() => {
             if (!isChildren.value) {
-                return cloneDeep(columns).map((item: { key: string; title: string; }) => {
+                return (cloneDeep(columns).map((item: { key: string; title: string; }) => {
                     if (item.key === 'serverName') {
                         item.title = '服务器'
                     }
                     return item;
-                });
+                }) as ColumnType<any>[]).filter(item => item.key !== 'parentTid');
             }
             else return columns;
         })
@@ -61,6 +66,7 @@ const GameServicesTable = defineComponent({
             const key = column.key as string;
             if (column.key === 'action') {
                 return (
+
                     <div class='action'>
                         <Button type='text' style='color: #1890FF;' onClick={() => editHandle(record)}>
                             编辑
@@ -72,20 +78,11 @@ const GameServicesTable = defineComponent({
                             </Button>
                         </Popconfirm>
                     </div>
+
                 )
             } else if (column.key === 'stat') {
-                switch (record.stat) {
-                    case 0:
-                        return <><a-badge status="error" />{status[record.stat!] && status[record.stat!].text}</>
-                    case 1:
-                        return <><a-badge status="success" />{status[record.stat!] && status[record.stat!].text}</>
-                    case 2:
-                        return <><a-badge status="processing" />{status[record.stat!] && status[record.stat!].text}</>
-                    case 3:
-                        return <><a-badge status="default" />{status[record.stat!] && status[record.stat!].text}</>
-                    default:
-                        break;
-                }
+                const statusObj = status[record.stat!];
+                if (statusObj) return <><a-badge status={statusObj.badgeStatus} />{statusObj.text}</>
             }
             return <>{record[key]}</>
         }
@@ -93,16 +90,7 @@ const GameServicesTable = defineComponent({
 
         // 自定义筛选footer
         const customQueryFooter = (props: FilterDropdownProps<ColumnType>): JSX.Element => {
-            return (
-                <>
-                    <QueryFooter
-                        filterDropdownProps={props}
-                        onHandleSearch={(e) => handleSearch(e)}
-                        onHandleReset={(e) => handleReset(e)}
-                    >
-                    </QueryFooter>
-                </>
-            )
+            return <QueryFooter filterDropdownProps={props} onHandleSearch={(e) => handleSearch(e)} onHandleReset={(e) => handleReset(e)} />;
         }
 
         // 自定义筛选条件
@@ -110,20 +98,21 @@ const GameServicesTable = defineComponent({
             const { setSelectedKeys, selectedKeys, column } = props;
             if (column.key === 'stat') {
                 return (
-                    <div style="padding: 12px;width: 300px;text-align: center;">
-                        <RadioGroup value={selectedKeys[0]} onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}>
-                            <Radio value={0} >关闭</Radio>
-                            <Radio value={1} >开启</Radio>
-                            <Radio value={2} >更新</Radio>
-                            <Radio value={3} >维护</Radio>
+                    <div class='custom-query-box'>
+                        <RadioGroup value={selectedKeys[0]} onChange={e => setSelectedKeys(e.target.value || e.target.value == 0 ? [e.target.value] : [])} size='small'>
+                            <Space size={10}>
+                                {status.map(({ value, text, badgeStatus }) => {
+                                    return <RadioButton value={value}><Badge status={badgeStatus}></Badge>{text}</RadioButton>
+                                })}
+                            </Space>
                         </RadioGroup>
                         {customQueryFooter(props)}
                     </div>
                 )
             }
             return (
-                <div style="padding: 12px">
-                    <Input placeholder={`查询${column.title}`} value={selectedKeys[0]} style="width: 188px; margin-bottom: 8px; display: block" onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}></Input>
+                <div class='custom-query-box'>
+                    <Input placeholder={`查询${column.title}`} value={selectedKeys[0]} onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}></Input>
                     {customQueryFooter(props)}
                 </div>
             )
@@ -184,10 +173,21 @@ export default GameServicesTable;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
+    position: relative;
 
     .action {
         display: flex;
         justify-content: space-around;
     }
+}
+</style>
+<style>
+.custom-query-box {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100px;
+    border-radius: 8px;
 }
 </style>

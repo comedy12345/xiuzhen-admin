@@ -1,3 +1,11 @@
+/*
+ * @Description: 游戏服务表格hook
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-11 14:10:52
+ */
+
 import { computed, onMounted, reactive, ref } from "vue";
 import { queryGameServices, deleteGameServices } from '@/api/gameServices/gameServicesApi'
 import { IGameServicesForm, IGameServicesList } from "@/interface/gameServicesTypes";
@@ -60,7 +68,7 @@ export default function (parentTid: String) {
     }
 
     // 使用通用查询
-    const { handleSearch, handleReset } = useGeneralQuery(queryParameter, getList);
+    const { handleSearch, handleReset } = useGeneralQuery(queryParameter);
 
 
     onMounted(() => {

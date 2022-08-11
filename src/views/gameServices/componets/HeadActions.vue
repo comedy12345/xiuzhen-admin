@@ -1,9 +1,9 @@
 <!--
- * @Description: 游戏服务搜索
+ * @Description: 游戏服务页面头部
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 11:42:01
+ * @LastEditTime: 2022-08-11 11:27:01
 -->
 <template>
     <div class="hand-action-container">
@@ -13,8 +13,7 @@
             </template>
             新增
         </a-button>
-        <edit-game-services ref='editGameServicesRef' @success="emit('refresh-table')">
-        </edit-game-services>
+        <edit-game-services ref='editGameServicesRef' @success="emit('refresh-table')"></edit-game-services>
     </div>
 
 </template>

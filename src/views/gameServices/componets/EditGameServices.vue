@@ -1,3 +1,10 @@
+<!--
+ * @Description: 游戏服务编辑
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-11 11:38:23
+-->
 <template>
     <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel"
              ok-text="保存"
@@ -14,21 +21,20 @@
                 <a-select ref="select" :loading="selectLoading"
                           v-model:value="gameServicesForm.parentTid">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
-                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{
-                            serverName
-                    }}
-                    </a-select-option>
+                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}</a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="服务状态" name="parentTid">
-                <a-select ref="select" v-model:value="gameServicesForm.stat">
-                    <a-select-option v-for="{ value, text } in status" :value="value">{{ text }}
-                    </a-select-option>
-                </a-select>
+                <a-radio-group v-model:value="gameServicesForm.stat">
+                    <a-space :size="10">
+                        <a-radio-button v-for="{ value, text, badgeStatus } in status" :value="value">
+                            <a-badge :status="badgeStatus" />{{ text }}
+                        </a-radio-button>
+                    </a-space>
+                </a-radio-group>
             </a-form-item>
         </a-form>
     </a-modal>
-
 </template>
     
 <script setup lang='ts'>
@@ -52,35 +58,20 @@ const props = defineProps({
     }
 });
 const { editGameService, type } = toRefs(props)
-
 const emit = defineEmits(['refresh-table']);
-onMounted(() => {
-    handleFocus();
-})
-
+onMounted(() => { handleFocus() })
 
 const visible = ref(false);
-
 const gameServicesFormRef = ref<any>(null);
-
 const confirmLoading = ref(false);
-
 const selectLoading = ref(false);
-
 // 表单初始数据
-const gameServicesForm = ref<IGameServicesForm>({
-    parentTid: 0,
-    serverName: "",
-    stat: 1,
-});
-
+const gameServicesForm = ref<IGameServicesForm>({ parentTid: 0, serverName: "", stat: 1 });
 // 父级游戏服务
 const selectData = ref<IGameServicesList[]>();
-
 const title = ref('新增游戏服务');
-if (type.value === 'update') {
-    title.value = '修改游戏服务';
-}
+
+if (type.value === 'update') title.value = '修改游戏服务';
 
 // 编辑回显
 watch(() => editGameService, () => {
@@ -103,16 +94,12 @@ const handleCancel = () => {
 }
 
 const handleFocus = async () => {
-    const res = await queryGameServices({ size: 10000, current: 1, columns: [{ func: 'eq', name: 'parentTid', value: 0 }] }, selectLoading);
-    selectData.value = res.data.records;
+    const { data: { records } } = await queryGameServices({ size: 10000, current: 1, columns: [{ func: 'eq', name: 'parentTid', value: 0 }] }, selectLoading);
+    selectData.value = records.filter(item => item.tid !== editGameService.value.tid);
 }
 
 defineExpose({
     visible
 })
-
-
 </script>
     
-<style>
-</style>

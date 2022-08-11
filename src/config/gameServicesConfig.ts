@@ -1,3 +1,10 @@
+/*
+ * @Description: 区服管理配置数据
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-11 10:45:49
+ */
 import { TableColumnType } from "ant-design-vue";
 
 
@@ -66,24 +73,33 @@ export const columns: TableColumnType[] = [
         width: 100
     },
 ];
+
 // 状态下拉框
-export const status = [
-    {
-        value: 0,
-        text: '关闭'
-    },
-    {
-        value: 1,
-        text: '开启'
-    },
-    {
-        value: 2,
-        text: '更新'
-    },
-    {
-        value: 3,
-        text: '维护'
-    }
-];
+export const status: {
+    value: number,
+    text: string,
+    badgeStatus: "default" | "error" | "success" | "warning" | "processing"
+}[] = [
+        {
+            value: 0,
+            text: '关闭',
+            badgeStatus: 'error'
+        },
+        {
+            value: 1,
+            text: '开启',
+            badgeStatus: 'success'
+        },
+        {
+            value: 2,
+            text: '更新',
+            badgeStatus: 'processing'
+        },
+        {
+            value: 3,
+            text: '维护',
+            badgeStatus: 'default'
+        }
+    ];
 
 

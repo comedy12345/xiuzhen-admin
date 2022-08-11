@@ -1,8 +1,13 @@
+<!--
+ * @Description: 游戏服务页面
+ * @Author: ljf
+ * @Date: 2022-07-26 09:05:35
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-11 11:25:49
+-->
 <template>
     <div class="game-services-container">
-        <GameServicesTable :columns="columns">
-
-        </GameServicesTable>
+        <GameServicesTable :columns="columns"></GameServicesTable>
     </div>
 
 </template>
