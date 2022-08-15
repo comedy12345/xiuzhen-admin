@@ -1,64 +1,257 @@
 <template>
-    <div class="skill-table-container">
-        <a-table :dataSource="dataSource" rowKey="tid" :columns="columns" @expand="handlerExpand"
-                 :indentSize="40" size="small" bordered>
+    <div class="skill-table-container" ref="tableRef">
+        <a-table :dataSource="tableData?.records"
+                 rowKey="tid"
+                 :loading="tableLoading"
+                 :columns="filterColumns"
+                 :indentSize="40" size="small" bordered
+                 :pagination="!isSort ? pagination : false"
+                 :row-selection="isChild && !isSort ? rowSelection : undefined"
+                 :sticky="{ offsetHeader: !isSort ? -21 : 0 }"
+                 :scroll="{ x: 1200, y: 400 }"
+                 @change="handleTableChange">
+            <template #customFilterDropdown="props">
+                <div v-if="props.column.key === 'skillName'" class="skill-query-box">
+                    <a-input placeholder="技能名称" :value="props.selectedKeys[0]"
+                             @change="(e: ChangeEvent) => props.setSelectedKeys(e.target.value ? [e.target.value] : [])">
+                    </a-input>
+                    <QueryFooter :filter-dropdown-props="props"
+                                 @handle-reset="(e) => handleReset(e)"
+                                 @handle-search="(e) => handleSearch(e)">
+                    </QueryFooter>
+                </div>
+                <div v-else-if="props.column.key === 'passivity' || props.column.key === 'isCombine'"
+                     class="skill-query-box">
+
+                    <a-radio-group :value="props.selectedKeys[0]"
+                                   @change="(e: RadioChangeEvent) => props.setSelectedKeys(e.target.value || e.target.value === 0 ? [e.target.value] : [])"
+                                   button-style="solid">
+                        <a-space :size="20">
+                            <a-radio-button :value="1">是</a-radio-button>
+                            <a-radio-button :value="0">否</a-radio-button>
+                        </a-space>
+                    </a-radio-group>
+
+
+                    <QueryFooter :filter-dropdown-props="props"
+                                 @handle-reset="(e) => handleReset(e)"
+                                 @handle-search="(e) => handleSearch(e)">
+                    </QueryFooter>
+                </div>
+                <div v-else-if="props.column.key === 'domainId'"
+                     class="skill-query-box">
+                    <AreaServer :value="props.selectedKeys[0]"
+                                @update:value="value => props.setSelectedKeys(value ? [value] : [])">
+                    </AreaServer>
+                    <QueryFooter :filter-dropdown-props="props"
+                                 @handle-reset="(e) => handleReset(e)"
+                                 @handle-search="(e) => handleSearch(e)">
+                    </QueryFooter>
+                </div>
+
+            </template>
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
-                    <a-button type="text" style="color: #1890FF;" @click="router.push(`/skillBuf/${record.tid}`)">
-                        技能buf管理
-                    </a-button>
-                    <a-button v-if="record.is_combine" type="text" style="color: #1890FF;"
-                              @click="handlerAddSkill">
-                        添加子技能
-                    </a-button>
-                    <a-button type="text" style="color: #1890FF;">编辑</a-button>
-                    <a-button type="text" style="color: red;">删除</a-button>
-                </template>
-                <template v-if="column.key === 'is_combine'">
-                    {{ record[column.key] ? '是' : '否' }}
+                    <div class="action">
+                        <a-button v-if="!isSort" type="text" style="color: #1890FF;"
+                                  @click="router.push(`/skillBuf/${record.sid}/${record.skillName}技能buf管理`)">
+                            技能buf
+                        </a-button>
+
+                        <a-button v-if="record.isCombine === 1 && !isSort" type="text"
+                                  style="color: #1890FF;"
+                                  @click="handlerChildSkill(record)">
+                            子技能
+                        </a-button>
+                        <a-button v-if="!isSort" type="text" style="color: #1890FF;"
+                                  @click="handlerEdit(record)">
+                            编辑
+                        </a-button>
+
+                        <a-popconfirm placement="leftTop" title="确定要删除这个技能?" ok-text="删除"
+                                      cancel-text="取消" @confirm="deleteHandle(record.tid!)">
+                            <a-button type='text' style='color: red;'>
+                                删除
+                            </a-button>
+                        </a-popconfirm>
+                    </div>
+
                 </template>
             </template>
         </a-table>
-        <EditSkill v-if="showEditSkill" @close-edit-skill="showEditSkill = false" :editType="0"></EditSkill>
+        <EditSkill v-if="showEditSkill" @close-edit-skill="showEditSkill = false"
+                   :tid="editTid" @on-ok="getSkills">
+        </EditSkill>
     </div>
 </template>
     
 <script setup lang='ts'>
-import { ColumnsType } from 'ant-design-vue/es/table/Table';
-import { ref, toRefs } from 'vue';
+import { ISkillForm, ISkillList } from '@/interface/skillTypes';
+import { computed, nextTick, onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import EditSkill from '../components/EditSkill.vue';
-const router = useRouter();
+import { deleteSkill, querySkills } from '@/api/skillApi';
+import { message, RadioChangeEvent, TablePaginationConfig, TableProps } from 'ant-design-vue';
+import { IBaseQueryParameter, IData } from '@/interface/types';
+import { getColumns } from '@/config/skillConfig';
+import { Key } from 'ant-design-vue/lib/table/interface';
+import QueryFooter from '@/components/QueryFooter/index.vue';
+import useGeneralQuery from "@/hooks/generalQuery";
+import AreaServer from '@/components/AreaServer/index.vue';
+import CustomDragDrop from '@/utils/CustomDragDrop'
+import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
+
 const props = defineProps({
-    columns: {
-        type: Object as () => ColumnsType,
-        required: true
+    isChild: {
+        type: Boolean,
+        defalut: false
     },
     dataSource: {
-        type: Object as any,
-        required: true
+        type: Object as () => ISkillList[],
+        default: []
+    },
+    isSort: {
+        type: Boolean,
+        default: false
+    },
+    selectedRowKeys: {
+        type: Array<Key>,
+        default: []
     }
-});
-const { columns, dataSource } = toRefs(props);
+})
+const { isChild, dataSource, isSort, selectedRowKeys } = toRefs(props)
+const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill']);
 const showEditSkill = ref(false);
-const handlerAddSkill = () => {
+const router = useRouter();
+const editTid = ref('');
+const columns = getColumns();
+
+// 编辑弹出层开启
+const handlerEdit = (record: ISkillForm) => {
     showEditSkill.value = true;
+    editTid.value = record.tid!;
 }
-const handlerExpand = (expanded: boolean, record: any) => {
-    console.log(record)
-    record.children.push({
-        tid: '1',
-        domain_tid: '一区',
-        skill_name: '排山倒海子技能',
-        passivity: '是',
-        passivity_trigger_on_type: '每秒触发',
-        is_combine: false,
-        combine_sk_ls: '111111',
-        combine_sk_order: '随机出招',
-        expend_prop: '消耗体力',
-        expend_val: '100'
+
+// 删除
+const deleteHandle = async (tid: string) => {
+    if (isChild.value) {
+        emit('del-skill', tableData.value.records.filter(item => item.tid !== tid));
+        return;
+    }
+    const { data } = await deleteSkill(tid);
+    message.success(data);
+    getSkills();
+}
+
+// 查询参数
+const queryParameter = reactive<IBaseQueryParameter>({
+    size: 10,
+    current: 1,
+    columns: []
+});
+// 使用通用查询
+const { handleSearch, handleReset } = useGeneralQuery(queryParameter);
+
+// 列表接口返回结果
+const tableData = ref<IData<ISkillList[]>>({
+    records: []
+});
+
+// 分页对象
+const pagination = computed(() => ({
+    total: tableData.value?.total,
+    current: tableData.value?.current,
+    pageSize: tableData.value?.size,
+}));
+
+const tableLoading = ref(false);
+// 查询列表
+const getSkills = async () => {
+    const { data } = await querySkills(queryParameter, tableLoading);
+    tableData.value = data;
+}
+
+// 分页事件
+const handleTableChange = (pagination: TablePaginationConfig) => {
+    queryParameter.current = pagination.current!;
+    queryParameter.size = pagination.pageSize;
+    getSkills();
+}
+
+
+
+// 选中数据事件
+const rowSelection = ref<TableProps['rowSelection']>({
+    selectedRowKeys: selectedRowKeys.value,
+    onSelect: (record, selected): void => {
+        emit('get-Select-skill', record, selected);
+    },
+});
+
+// 字段过滤
+const filterColumns = computed(() => {
+    if (isSort.value) {
+        return columns.filter(item => {
+            return item.key !== 'isCombine' && item.key !== 'combineSkOrder';
+        }).map(item => {
+            if (item.key === 'action') {
+                item.width = 100;
+            }
+            item.customFilterDropdown = false;
+            return item;
+        })
+    } else if (isChild.value) {
+        return columns.filter(item => {
+            return item.key !== 'isCombine' && item.key !== 'combineSkOrder' && item.key !== 'action';
+        })
+    } else {
+        return columns;
+    }
+})
+
+const tableRef = ref<HTMLElement>();
+const initSortable = () => {
+    new CustomDragDrop({
+        el: tableRef.value?.querySelector('.ant-table-tbody')!,
+        drop: ({ firstIndex, lastIndex }) => {
+            const startObj = { ...dataSource.value[firstIndex! - 1] }
+            dataSource.value[firstIndex! - 1] = dataSource.value[lastIndex! - 1]
+            dataSource.value[lastIndex! - 1] = startObj
+        },
     })
 }
+
+onMounted(() => {
+    if (isSort.value) {
+        watchEffect(() => {
+            tableData.value.records = dataSource.value;
+            nextTick(() => {
+                initSortable();
+            })
+        })
+        return;
+    }
+    if (isChild.value) {
+        queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
+        nextTick(() => {
+            watchEffect(() => {
+                rowSelection.value!.selectedRowKeys = selectedRowKeys.value;
+            })
+        })
+    }
+    getSkills();
+});
+
+
+// 监听点击子技能管理
+const handlerChildSkill = (skill: ISkillList) => {
+    emit("child-Skill", skill);
+}
+
+defineExpose({
+    getSkills
+})
+
 
 </script>
     
@@ -74,7 +267,29 @@ const handlerExpand = (expanded: boolean, record: any) => {
             color: rgb(105, 105, 105);
             font-weight: 550;
         }
+
+        .action {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .ant-btn {
+                padding: 5px;
+            }
+        }
     }
 
 }
+
+.ant-table-filter-dropdown {
+    .skill-query-box {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        justify-content: space-between;
+        height: 80px;
+        align-items: center;
+    }
+}
 </style>
+

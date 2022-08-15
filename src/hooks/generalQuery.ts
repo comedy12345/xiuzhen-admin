@@ -9,7 +9,7 @@ import { IBaseQueryParameter, IColumn } from "@/interface/types";
 import { ColumnType, FilterDropdownProps } from "ant-design-vue/es/table/interface";
 
 // ant通用查询钩子
-export default function (queryParameter: IBaseQueryParameter) {
+export default function (queryParameter: IBaseQueryParameter, getList?: Function) {
     //查询
     const handleSearch = (props: FilterDropdownProps<ColumnType>) => {
         const { selectedKeys, confirm, column: { key } } = props;
@@ -18,6 +18,7 @@ export default function (queryParameter: IBaseQueryParameter) {
         if (columnIndex != -1) queryParameter.columns?.splice(columnIndex!, 1, column);
         else queryParameter.columns?.push(column);
         confirm();
+        getList && getList();
     }
     // 重置
     const handleReset = (props: FilterDropdownProps<ColumnType>) => {
@@ -26,6 +27,7 @@ export default function (queryParameter: IBaseQueryParameter) {
         columnIndex !== -1 && queryParameter.columns?.splice(columnIndex!, 1);
         clearFilters && clearFilters();
         confirm();
+        getList && getList();
     };
     return {
         handleSearch,

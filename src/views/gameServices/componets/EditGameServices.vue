@@ -21,13 +21,16 @@
                 <a-select ref="select" :loading="selectLoading"
                           v-model:value="gameServicesForm.parentTid">
                     <a-select-option :value="0">无父级游戏服务</a-select-option>
-                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{ serverName }}</a-select-option>
+                    <a-select-option v-for="{ tid, serverName } in selectData" :value="tid">{{
+                            serverName
+                    }}</a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item label="服务状态" name="parentTid">
                 <a-radio-group v-model:value="gameServicesForm.stat">
                     <a-space :size="10">
-                        <a-radio-button v-for="{ value, text, badgeStatus } in status" :value="value">
+                        <a-radio-button v-for="{ value, text, badgeStatus } in status"
+                                        :value="value">
                             <a-badge :status="badgeStatus" />{{ text }}
                         </a-radio-button>
                     </a-space>
@@ -40,7 +43,7 @@
 <script setup lang='ts'>
 import { onMounted, ref, toRefs, watch } from 'vue';
 import { IGameServicesForm, IGameServicesList } from '@/interface/gameServicesTypes';
-import { saveGameServices, queryGameServices } from '@/api/gameServices/gameServicesApi';
+import { saveGameServices, queryGameServices } from '@/api/gameServicesApi';
 import { message } from 'ant-design-vue';
 import { status } from '@/config/gameServicesConfig';
 

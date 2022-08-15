@@ -18,7 +18,7 @@ export interface IData<T> {
     // 当前页
     current?: number;
 
-    maxLimit: number;
+    maxLimit?: number;
     // 总页数
     pages?: number;
 

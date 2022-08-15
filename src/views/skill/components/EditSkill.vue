@@ -1,65 +1,66 @@
 <template>
     <div class="edit-skill-container">
-        <a-modal v-model:visible="visible" :title="title" @ok="handleOk"
-                 :afterClose="() => emit('close-Edit-skill')" width="70%" wrap-class-name="full-modal" okText="保存"
-                 cancel-text="取消">
-
+        <a-modal style="top: 20px;"
+                 v-model:visible="visible"
+                 :title="title"
+                 @ok="handleOk"
+                 :afterClose="() => emit('close-Edit-skill')"
+                 width="40%"
+                 okText="保存"
+                 cancel-text="取消"
+                 :confirm-loading="confirmLoading">
             <a-form>
-                <a-row justify="center">
-                    <a-col span="12">
-                        <a-form-item label="所在区" :label-col="{ span: 6 }">
-                            <a-select v-model:value="formData.domain_tid" :options="[{ label: '一区', value: '1' }]" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col span="12">
-                        <a-form-item label="技能名称" :label-col="{ span: 6 }">
-                            <a-input v-model:value="formData.skill_name" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
+                <a-form-item label="所在区" :label-col="{ span: 6 }">
+                    <AreaServer v-model:value="formData.domainId">
+                    </AreaServer>
+                </a-form-item>
 
-                <a-row justify="center">
-                    <a-col span="12">
-                        <a-form-item label="是否被动技能" :label-col="{ span: 6 }">
-                            <a-switch v-model:checked="passivityC" checked-children="是" un-checked-children="否" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col span="12">
-                        <a-form-item v-if="passivityC" label="被动触发特性" :label-col="{ span: 6 }">
-                            <a-select v-model:value="formData.passivity_trigger_on_type"
-                                      :options="[{ label: '被攻击时', value: 1 }, { label: '每回合触发', value: 2 },
-                                      { label: '每秒触发', value: 3 }]" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
+                <a-form-item label="技能名称" :label-col="{ span: 6 }">
+                    <a-input v-model:value="formData.skillName" />
+                </a-form-item>
 
-                <a-row justify="center">
-                    <a-col span="12">
-                        <a-form-item label="消耗属性" :label-col="{ span: 6 }">
-                            <a-select v-model:value="formData.expend_prop"
-                                      :options="[{ label: '属性111', value: 1 }, { label: '属性22', value: 2 }]" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col span="12">
-                        <a-form-item label="消耗值" :label-col="{ span: 6 }">
-                            <a-input v-model:value="formData.expend_val" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
+                <a-form-item label="固定编号" :label-col="{ span: 6 }">
+                    <a-input v-model:value="formData.sid" />
+                </a-form-item>
 
-                <a-row v-if="editType" justify="center">
-                    <a-col span="12">
-                        <a-form-item label="是否组合技能" :label-col="{ span: 6 }">
-                            <a-switch v-model:checked="is_combineC" checked-children="是" un-checked-children="否" />
-                        </a-form-item>
-                    </a-col>
-                    <a-col span="12">
-                        <a-form-item v-if="is_combineC" label="组合技能出招顺序" :label-col="{ span: 6 }">
-                            <a-select v-model:value="formData.combine_sk_order"
-                                      :options="[{ label: '随机出招', value: 1 }, { label: '顺序出招', value: 2 }]" />
-                        </a-form-item>
-                    </a-col>
-                </a-row>
+                <a-form-item label="消耗属性" :label-col="{ span: 6 }">
+                    <a-select v-model:value="formData.expendProp"
+                              :options="[{ label: '能量', value: 1 }]" />
+                </a-form-item>
+
+                <a-form-item label="消耗值" :label-col="{ span: 6 }">
+                    <a-input v-model:value="formData.expendVal" />
+                </a-form-item>
+
+                <a-form-item label="是否被动技能" :label-col="{ span: 6 }">
+                    <a-switch v-model:checked="passivity" checked-children="是"
+                              un-checked-children="否" />
+                </a-form-item>
+
+                <a-form-item v-if="passivity" label="被动触发特性" :label-col="{ span: 6 }">
+                    <a-radio-group v-model:value="formData.passivityTriggerOnType">
+                        <a-radio
+                                 v-for="({ label, value }) in passivityTriggerOnTypeDatas"
+                                 :value="value">
+                            {{ label }}
+                        </a-radio>
+                    </a-radio-group>
+                </a-form-item>
+
+
+                <a-form-item label="是否组合技能" :label-col="{ span: 6 }">
+                    <a-switch v-model:checked="isCombine" checked-children="是"
+                              un-checked-children="否" />
+                </a-form-item>
+
+                <a-form-item v-if="isCombine" label="组合技能出招顺序" :label-col="{ span: 6 }">
+                    <a-radio-group v-model:value="formData.combineSkOrder">
+                        <a-radio v-for="({ label, value }) in combineSkOrderDatas" :value="value">
+                            {{ label }}
+                        </a-radio>
+                    </a-radio-group>
+                </a-form-item>
+
             </a-form>
         </a-modal>
 
@@ -68,28 +69,34 @@
 </template>
     
 <script setup lang='ts'>
-import { onMounted, ref, computed, toRefs, reactive } from 'vue';
+import { ISkillForm, ISkillList } from '@/interface/skillTypes';
+import { onMounted, ref, computed, toRefs, reactive, watchEffect } from 'vue';
+import { passivityTriggerOnTypeDatas, combineSkOrderDatas } from '@/config/skillConfig';
+import AreaServer from '@/components/AreaServer/index.vue';
+import { saveSkill, getSkillById } from '@/api/skillApi';
+import { message } from 'ant-design-vue';
 
-const { title, editType } = defineProps({
+
+const { title, tid } = defineProps({
     title: {
         type: String,
         default: '新增技能'
     },
-    editType: {
-        type: Number,
-        default: 1
-    },
-    width: {
+
+    tid: {
         type: String,
-        default: '100%'
+        default: ''
     }
 
 })
 const emit = defineEmits(['close-Edit-skill', 'on-ok']);
 onMounted(() => { visible.value = true; })
 
+const confirmLoading = ref(false);
+
+
 // 是否被动技能
-const passivityC = computed({
+const passivity = computed({
     get: () => formData.value.passivity === 1,
     set: (val) => {
         if (val) {
@@ -100,34 +107,35 @@ const passivityC = computed({
     }
 });
 // 是否组合属性
-const is_combineC = computed({
-    get: () => formData.value.is_combine === 1,
+const isCombine = computed({
+    get: () => formData.value.isCombine === 1,
     set: (val) => {
         if (val) {
-            formData.value.is_combine = 1;
+            formData.value.isCombine = 1;
             return;
         }
-        formData.value.is_combine = 0;
+        formData.value.isCombine = 0;
     }
 });
-const formData = ref({
-    domain_tid: '1',
-    skill_name: '',
-    passivity: 1,
-    passivity_trigger_on_type: 1,
-    is_combine: 1,
-    combine_sk_order: 1,
-    expend_prop: 1,
-    expend_val: ""
+const formData = ref<ISkillForm>({
+    isCombine: 0,
+    passivity: 0
+})
+watchEffect(async () => {
+    if (!tid) return;
+    const { data } = await getSkillById(tid);
+    formData.value = data;
 })
 
 // 控制弹出层显示
 const visible = ref(false);
 
 // 点击保存
-const handleOk = () => {
+const handleOk = async () => {
+    const { data } = await saveSkill(formData.value, confirmLoading);
     visible.value = false;
-    emit('on-ok', formData.value);
+    message.success(data)
+    emit('on-ok');
 }
 
 

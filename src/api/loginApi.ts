@@ -1,6 +1,6 @@
 import useHttp from "@/hooks/useHttp";
 import { IBaseResp } from "@/interface/types";
-import { ILoginRequest, ILoginResponse } from "../../interface/loginTypes";
+import { ILoginRequest, ILoginResponse } from "../interface/loginTypes";
 
 
 // 登录

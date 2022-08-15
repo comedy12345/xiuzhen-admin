@@ -47,7 +47,7 @@
 import { useRouter, useRoute } from 'vue-router';
 import { reactive } from 'vue';
 import { ILoginRequest } from '@/interface/loginTypes';
-import { reqLogin } from "@/api/login/loginApi";
+import { reqLogin } from "@/api/loginApi";
 import useUserInfoStore from "@/store/userInfo";
 const router = useRouter();
 const route = useRoute();

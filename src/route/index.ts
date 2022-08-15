@@ -25,9 +25,8 @@ export const routes: RouteRecordRaw[] = [
                   },
                   {
                         name: '技能buf管理',
-                        path: '/skillBuf/:skillId',
+                        path: '/skillBuf/:skillSid/:tagName',
                         component: () => import('@/views/skillBuf/index.vue'),
-
                   },
                   {
                         name: '用户管理',

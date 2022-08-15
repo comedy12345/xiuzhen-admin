@@ -5,6 +5,15 @@ import { useLayout } from "@/hooks/useLayout";
 export default defineComponent({
       setup() {
             const { state, route, removeRouteHistory, routerLinkHander } = useLayout();
+            const setTabName = (path: string, name: string) => {
+                  let reg = /[\u4e00-\u9fa5]/g;
+                  let names = path.match(reg);
+                  if (names) {
+                        const arr = path.split('/');
+                        return arr[arr.length - 1];
+                  };
+                  return name;
+            }
             return () => (
                   <div class="my-route-tag">
                         {
@@ -15,7 +24,7 @@ export default defineComponent({
                                                 onClose={removeRouteHistory(item.id)}
                                                 key={item.id}
                                           >
-                                                <span onClick={routerLinkHander(item.path)}>{item.name}</span>
+                                                <span onClick={routerLinkHander(item.path)}>{setTabName(item.path, item.name)}</span>
                                           </Tag>
                                     )
                               })

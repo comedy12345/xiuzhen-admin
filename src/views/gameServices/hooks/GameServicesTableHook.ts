@@ -7,7 +7,7 @@
  */
 
 import { computed, onMounted, reactive, ref } from "vue";
-import { queryGameServices, deleteGameServices } from '@/api/gameServices/gameServicesApi'
+import { queryGameServices, deleteGameServices } from '@/api/gameServicesApi'
 import { IGameServicesForm, IGameServicesList } from "@/interface/gameServicesTypes";
 import { IData } from "@/interface/types";
 import { TablePaginationConfig, message } from "ant-design-vue";
