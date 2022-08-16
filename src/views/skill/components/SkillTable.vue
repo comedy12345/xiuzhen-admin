@@ -87,7 +87,7 @@
     
 <script setup lang='ts'>
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
-import { computed, nextTick, onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, toRaw, toRefs, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import EditSkill from '../components/EditSkill.vue';
 import { deleteSkill, querySkills } from '@/api/skillApi';
@@ -98,8 +98,9 @@ import { Key } from 'ant-design-vue/lib/table/interface';
 import QueryFooter from '@/components/QueryFooter/index.vue';
 import useGeneralQuery from "@/hooks/generalQuery";
 import AreaServer from '@/components/AreaServer/index.vue';
-import CustomDragDrop from '@/utils/CustomDragDrop'
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
+import Sortable from "sortablejs";
+import { cloneDeep } from 'lodash';
 
 const props = defineProps({
     isChild: {
@@ -211,12 +212,12 @@ const filterColumns = computed(() => {
 
 const tableRef = ref<HTMLElement>();
 const initSortable = () => {
-    new CustomDragDrop({
-        el: tableRef.value?.querySelector('.ant-table-tbody')!,
-        drop: ({ firstIndex, lastIndex }) => {
-            const startObj = { ...dataSource.value[firstIndex! - 1] }
-            dataSource.value[firstIndex! - 1] = dataSource.value[lastIndex! - 1]
-            dataSource.value[lastIndex! - 1] = startObj
+    new Sortable(tableRef.value?.querySelector('.ant-table-tbody'), {
+        onEnd: function ({ oldIndex, newIndex }: any) {
+            const copyDataSource = tableData.value.records;
+            const oldData = copyDataSource[oldIndex - 1];
+            copyDataSource.splice(oldIndex - 1, 1);
+            copyDataSource.splice(newIndex - 1, 0, oldData);
         },
     })
 }

@@ -21,7 +21,7 @@ export default defineComponent({
                                     return (
                                           <Tag class={{ active: route.path === item.path }}
                                                 closable
-                                                onClose={removeRouteHistory(item.id)}
+                                                onClose={removeRouteHistory(item, route.path === item.path)}
                                                 key={item.id}
                                           >
                                                 <span onClick={routerLinkHander(item.path)}>{setTabName(item.path, item.name)}</span>

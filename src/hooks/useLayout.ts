@@ -6,7 +6,7 @@
  * @LastEditTime: 2022-07-26 10:41:46
  */
 
-import { useRouteHistoryStore } from "@/store/routeHistory";
+import { IrouteHistory, useRouteHistoryStore } from "@/store/routeHistory";
 import { useRoute, useRouter } from "vue-router";
 /**
  * @description: 返回面包屑需要的方法
@@ -22,9 +22,20 @@ export function useLayout() {
                   router.push(path);
             }
       }
-      const removeRouteHistory = (id: string) => {
+      const removeRouteHistory = (routeHistorys: IrouteHistory, isShow: boolean) => {
             return () => {
-                  state.routeHistorys = state.routeHistorys.filter((item: { id: string; }) => item.id !== id)
+
+                  state.routeHistorys = state.routeHistorys.filter((item: { id: string; }) => item.id !== routeHistorys.id);
+                  // 路由被关闭完了
+                  if (!state.routeHistorys.length) {
+                        router.push('/');
+                        return;
+                  }
+                  // 判断是否是当前显示的路由
+                  if (isShow) {
+                        router.push({ path: state.routeHistorys.at(-1)?.path!, replace: true });
+                        return;
+                  }
             }
       }
       return {

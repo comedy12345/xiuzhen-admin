@@ -28,7 +28,7 @@ export const saveBuf = (data: ISkillBufForm, loading?: Ref<boolean>): Promise<IB
 export const querySkillBufs = (data: IBaseQueryParameter, loading?: Ref<boolean>)
     : Promise<IBaseResp<IData<ISkillBufList[]>>> => {
     return useHttp<IBaseResp<IData<ISkillBufList[]>>>({
-        url: '/api/admin/role/skill/query',
+        url: '/api/admin/role/skill/skill-bufs-query',
         method: "POST",
         data,
         loading
