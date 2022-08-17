@@ -94,7 +94,7 @@ const handlerDelSkill = (skills: ISkillList[]) => {
     selectedRowKeys.value = skills.map(item => item.tid);
 }
 
-// 存储确定选择的技能
+// 存储最终选择的技能
 const dataSource = ref<ISkillList[]>([]);
 
 const handlerOk = () => {

@@ -33,14 +33,13 @@
                 </a-form-item>
 
                 <a-form-item label="是否被动技能" :label-col="{ span: 6 }">
-                    <a-switch v-model:checked="passivity" checked-children="是"
-                              un-checked-children="否" />
+                    <a-switch v-model:checked="formData.passivity" checked-children="是"
+                              un-checked-children="否" :unCheckedValue="0" :checkedValue="1" />
                 </a-form-item>
 
-                <a-form-item v-if="passivity" label="被动触发特性" :label-col="{ span: 6 }">
+                <a-form-item v-if="formData.passivity" label="被动触发特性" :label-col="{ span: 6 }">
                     <a-radio-group v-model:value="formData.passivityTriggerOnType">
-                        <a-radio
-                                 v-for="({ label, value }) in passivityTriggerOnTypeDatas"
+                        <a-radio v-for="({ label, value }) in passivityTriggerOnTypeDatas"
                                  :value="value">
                             {{ label }}
                         </a-radio>
@@ -49,11 +48,11 @@
 
 
                 <a-form-item label="是否组合技能" :label-col="{ span: 6 }">
-                    <a-switch v-model:checked="isCombine" checked-children="是"
-                              un-checked-children="否" />
+                    <a-switch v-model:checked="formData.isCombine" checked-children="是" un-checked-children="否" :unCheckedValue="0"
+                              :checkedValue="1" />
                 </a-form-item>
 
-                <a-form-item v-if="isCombine" label="组合技能出招顺序" :label-col="{ span: 6 }">
+                <a-form-item v-if="formData.isCombine" label="组合技能出招顺序" :label-col="{ span: 6 }">
                     <a-radio-group v-model:value="formData.combineSkOrder">
                         <a-radio v-for="({ label, value }) in combineSkOrderDatas" :value="value">
                             {{ label }}
@@ -69,8 +68,8 @@
 </template>
     
 <script setup lang='ts'>
-import { ISkillForm, ISkillList } from '@/interface/skillTypes';
-import { onMounted, ref, computed, toRefs, reactive, watchEffect } from 'vue';
+import { ISkillForm } from '@/interface/skillTypes';
+import { onMounted, ref, computed, watchEffect } from 'vue';
 import { passivityTriggerOnTypeDatas, combineSkOrderDatas } from '@/config/skillConfig';
 import AreaServer from '@/components/AreaServer/index.vue';
 import { saveSkill, getSkillById } from '@/api/skillApi';
@@ -94,38 +93,16 @@ onMounted(() => { visible.value = true; })
 
 const confirmLoading = ref(false);
 
-
-// 是否被动技能
-const passivity = computed({
-    get: () => formData.value.passivity === 1,
-    set: (val) => {
-        if (val) {
-            formData.value.passivity = 1;
-            return;
-        }
-        formData.value.passivity = 0;
-    }
-});
-// 是否组合属性
-const isCombine = computed({
-    get: () => formData.value.isCombine === 1,
-    set: (val) => {
-        if (val) {
-            formData.value.isCombine = 1;
-            return;
-        }
-        formData.value.isCombine = 0;
-    }
-});
 const formData = ref<ISkillForm>({
     isCombine: 0,
     passivity: 0
-})
+});
+
 watchEffect(async () => {
     if (!tid) return;
     const { data } = await getSkillById(tid);
     formData.value = data;
-})
+});
 
 // 控制弹出层显示
 const visible = ref(false);
@@ -138,11 +115,4 @@ const handleOk = async () => {
     emit('on-ok');
 }
 
-
-
-
 </script>
-    
-
-<style lang="scss" >
-</style>

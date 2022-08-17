@@ -119,14 +119,14 @@ const props = defineProps({
         default: []
     }
 })
-const { isChild, dataSource, isSort, selectedRowKeys } = toRefs(props)
+const { isChild, dataSource, isSort, selectedRowKeys } = toRefs(props);
 const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill']);
-const showEditSkill = ref(false);
 const router = useRouter();
-const editTid = ref('');
-const columns = getColumns();
+
 
 // 编辑弹出层开启
+const showEditSkill = ref(false);
+const editTid = ref('');
 const handlerEdit = (record: ISkillForm) => {
     showEditSkill.value = true;
     editTid.value = record.tid!;
@@ -143,21 +143,19 @@ const deleteHandle = async (tid: string) => {
     getSkills();
 }
 
-// 查询参数
+// 列表查询相关>>>>>>>>>>>>>>>>
+const columns = getColumns();
 const queryParameter = reactive<IBaseQueryParameter>({
     size: 10,
     current: 1,
     columns: []
 });
-// 使用通用查询
 const { handleSearch, handleReset } = useGeneralQuery(queryParameter);
 
-// 列表接口返回结果
 const tableData = ref<IData<ISkillList[]>>({
     records: []
 });
 
-// 分页对象
 const pagination = computed(() => ({
     total: tableData.value?.total,
     current: tableData.value?.current,
@@ -165,18 +163,17 @@ const pagination = computed(() => ({
 }));
 
 const tableLoading = ref(false);
-// 查询列表
 const getSkills = async () => {
     const { data } = await querySkills(queryParameter, tableLoading);
     tableData.value = data;
 }
 
-// 分页事件
 const handleTableChange = (pagination: TablePaginationConfig) => {
     queryParameter.current = pagination.current!;
     queryParameter.size = pagination.pageSize;
     getSkills();
 }
+// 列表查询结束<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -186,9 +183,8 @@ const rowSelection = ref<TableProps['rowSelection']>({
     onSelect: (record, selected): void => {
         emit('get-Select-skill', record, selected);
     },
-    onSelectAll: (selected, selectedRows, changeRows): void => {
+    onSelectAll: (selected, _, changeRows): void => {
         emit('get-Select-all-skill', selected, changeRows);
-        // console.log(selected, selectedRowKeys, changeRows)
     }
 });
 
@@ -214,6 +210,8 @@ const filterColumns = computed(() => {
 })
 
 const tableRef = ref<HTMLElement>();
+
+// 初始化拖拽排序
 const initSortable = () => {
     new Sortable(tableRef.value?.querySelector('.ant-table-tbody'), {
         onEnd: function ({ oldIndex, newIndex }: any) {
