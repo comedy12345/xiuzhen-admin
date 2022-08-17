@@ -47,6 +47,8 @@ export interface ISkillBufForm {
     tid?: bigint;
     // 触发机率
     triggerOdds?: number;
+    // 追加技能
+    saddRef?: string;
 }
 
 export interface ISkillBufList extends ISkillBufForm {

@@ -1,7 +1,8 @@
 
 <template>
     <div class="child-skill">
-        <a-modal centered
+        <a-modal v-if="isModal && showList"
+                 centered
                  v-model:visible="showList"
                  title="子技能列表"
                  width="80%"
@@ -12,15 +13,28 @@
                  @ok="handlerSaveSkill"
                  @cancel="handlerClose">
             <div>
-                <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true" type="primary">
+                <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true"
+                          type="primary">
                     选择子技能
                 </a-button>
-                <SkillTable :dataSource="dataSource" :isChild="true" :isSort="true"
+                <SkillTable :dataSource="dataSource"
+                            :isChild="true"
+                            :isSort="true"
                             @del-skill="handlerDelSkill">
                 </SkillTable>
             </div>
         </a-modal>
-        <a-modal centered
+        <div v-else>
+            <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true"
+                      type="primary">
+                {{ isModal ? '选择技能' : '追加参考技能' }}
+            </a-button>
+            <SkillTable :dataSource="dataSource" :isChild="true" :isSort="true" :isModal="isModal"
+                        @del-skill="handlerDelSkill">
+            </SkillTable>
+        </div>
+        <a-modal v-if="showAddList"
+                 centered
                  v-model:visible="showAddList"
                  title="选择子技能"
                  width="80%"
@@ -38,7 +52,7 @@
 <script setup lang='ts'>
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
 import { reactive, ref, toRefs, watchEffect } from 'vue';
-import SkillTable from "./SkillTable.vue";
+import SkillTable from "@/components/SkillTable/index.vue";
 import { saveSkill, getChildSkill } from '@/api/skillApi';
 import { message } from 'ant-design-vue';
 import { IBaseQueryParameter } from '@/interface/types';
@@ -47,10 +61,18 @@ const props = defineProps({
         type: String,
         default: ''
     },
+    saddRef: {
+        type: String,
+        default: ''
+    },
+    isModal: {
+        type: Boolean,
+        default: true
+    }
 })
 
-const { skillTid } = toRefs(props)
-const emit = defineEmits(['close', 'ok']);
+const { skillTid, isModal } = toRefs(props)
+const emit = defineEmits(['close', 'ok', 'update:saddRef']);
 // 弹出层开关
 const showList = ref(false);
 const showAddList = ref(false);
@@ -92,6 +114,9 @@ const handlerDelSkill = (skills: ISkillList[]) => {
     slectedSkills.value = skills;
     dataSource.value = skills;
     selectedRowKeys.value = skills.map(item => item.tid);
+    if (!isModal.value) {
+        emit('update:saddRef', dataSource.value.map(item => item.sid).join(','));
+    }
 }
 
 // 存储最终选择的技能
@@ -100,6 +125,10 @@ const dataSource = ref<ISkillList[]>([]);
 const handlerOk = () => {
     dataSource.value = slectedSkills.value;
     showAddList.value = false;
+    // 如果不是弹窗形式的直接把技能sid发过去
+    if (!isModal.value) {
+        emit('update:saddRef', dataSource.value.map(item => item.sid).join(','));
+    }
 }
 
 // 存储子技能提交数据
@@ -133,7 +162,9 @@ const queryParameter = reactive<IBaseQueryParameter>({
 });
 // 初始化子技能列表
 const getChild = async () => {
-    queryParameter.columns = [{ func: 'eq', name: 'tid', value: skillTid.value }];
+    // 要是弹窗形式的用tid去回显
+    if (isModal.value) queryParameter.columns = [{ func: 'eq', name: 'tid', value: skillTid.value }];
+
     const { data: { records } } = await getChildSkill(queryParameter);
     dataSource.value = records;
     slectedSkills.value = records;

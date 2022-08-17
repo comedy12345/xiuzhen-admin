@@ -12,7 +12,7 @@ import { onMounted, ref } from "vue";
 export default function () {
       const obj = {
             bufTypeStr: 1, changeValTypeStr: 2, cycleTypeStr: 3,
-            findDomainStr: 4, findPropStr: 5, refTargetStr: 6, resultTypeStr: 7, changeTypeStr: 8
+            findDomainStr: 4, findPropStr: 5, refTargetStr: 6, resultTypeStr: 7, changeTypeStr: 8, orderIdxStr: 9
       };
       const bufSelects = ref<ISelectDatas[]>([]);
 

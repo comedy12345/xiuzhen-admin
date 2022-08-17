@@ -9,20 +9,20 @@
     <div class="skill-container">
         <HeaderOperation @refresh-table="() => skillTableRef?.getSkills()"></HeaderOperation>
         <SkillTable ref="skillTableRef" @child-skill="handlerChildSkill"></SkillTable>
-        <ChildSkill v-if="childSkillShow" ref="childSkillRef" :skill-tid="skillTid"
-                    @close="handlerClose" @ok="() => skillTableRef?.getSkills()">
-        </ChildSkill>
+        <ChoiceSkill v-if="childSkillShow" ref="choiceSkillRef" :skill-tid="skillTid"
+                     @close="handlerClose" @ok="() => skillTableRef?.getSkills()">
+        </ChoiceSkill>
     </div>
 </template>
     
 
 <script setup lang='ts' name="/skill">
 import HeaderOperation from './components/HeaderOperation.vue';
-import SkillTable from './components/SkillTable.vue';
-import ChildSkill from './components/ChildSkill.vue';
+import SkillTable from '@/components/SkillTable/index.vue';
+import ChoiceSkill from '@/components/ChoiceSkill/index.vue';
 import { nextTick, ref } from 'vue';
 
-const childSkillRef = ref<InstanceType<typeof ChildSkill> | null>(null);
+const choiceSkillRef = ref<InstanceType<typeof ChoiceSkill> | null>(null);
 
 const skillTableRef = ref<InstanceType<typeof SkillTable> | null>(null);
 
@@ -32,7 +32,7 @@ const skillTid = ref('')
 const handlerChildSkill = (tid: string) => {
     childSkillShow.value = true;
     nextTick(() => {
-        childSkillRef.value!.showList = true;
+        choiceSkillRef.value!.showList = true;
         skillTid.value = tid;
     })
 }

@@ -48,7 +48,8 @@
 
 
                 <a-form-item label="是否组合技能" :label-col="{ span: 6 }">
-                    <a-switch v-model:checked="formData.isCombine" checked-children="是" un-checked-children="否" :unCheckedValue="0"
+                    <a-switch v-model:checked="formData.isCombine" checked-children="是"
+                              un-checked-children="否" :unCheckedValue="0"
                               :checkedValue="1" />
                 </a-form-item>
 

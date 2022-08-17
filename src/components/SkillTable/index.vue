@@ -89,7 +89,7 @@
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
 import { computed, nextTick, onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-import EditSkill from '../components/EditSkill.vue';
+import EditSkill from '@/views/skill/components/EditSkill.vue';
 import { deleteSkill, querySkills } from '@/api/skillApi';
 import { message, RadioChangeEvent, TablePaginationConfig, TableProps } from 'ant-design-vue';
 import { IBaseQueryParameter, IData } from '@/interface/types';
@@ -117,9 +117,13 @@ const props = defineProps({
     selectedRowKeys: {
         type: Array<Key>,
         default: []
+    },
+    isModal: {
+        type: Boolean,
+        default: true
     }
 })
-const { isChild, dataSource, isSort, selectedRowKeys } = toRefs(props);
+const { isChild, dataSource, isSort, selectedRowKeys, isModal } = toRefs(props);
 const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill']);
 const router = useRouter();
 
@@ -228,15 +232,16 @@ onMounted(() => {
     if (isSort.value) {
         watchEffect(() => {
             tableData.value.records = dataSource.value;
-            nextTick(() => {
-                initSortable();
-            })
+            if (isModal.value) {
+                nextTick(() => { initSortable() });
+            }
+
         })
         return;
     }
     // 选择技能
     if (isChild.value) {
-        queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
+        isModal.value && queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
         nextTick(() => {
             watchEffect(() => {
                 rowSelection.value!.selectedRowKeys = selectedRowKeys.value;

@@ -1,15 +1,16 @@
 <template>
     <div class="edit-skill-container">
-        <a-modal v-model:visible="visible" :title="title" @ok="handleOk"
-                 :afterClose="() => emit('close-Edit')" okText="保存"
-                 cancel-text="取消" width="60%">
+        <a-modal class="edit-buf-modal" v-model:visible="visible" :title="title" @ok="handleOk"
+                 :afterClose="() => emit('close-Edit')" okText="保存" centered
+                 cancel-text="取消" width="80%">
             <a-form>
                 <a-row justify="center">
                     <a-col span="12">
                         <a-form-item label="出招顺序" :label-col="{ span: 8 }">
                             <a-select v-model:value="formData.orderIdx"
-                                      :options="[{ label: '随时', value: 0 }, { label: '随机', value: 1 }]"
-                                      placeholder="请输选择出招顺序" />
+                                      :options="getEnumByType(9)" placeholder="请输选择出招顺序"
+                                      show-search
+                                      :filter-option="filterOption" />
                         </a-form-item>
                     </a-col>
                     <a-col span="12">
@@ -123,7 +124,19 @@
                     </a-col> -->
                     <a-col span="12">
                         <a-form-item label="输出参考" :label-col="{ span: 8 }">
-                            <a-input v-model:value="formData.refTarget" placeholder="请输入输出参考" />
+                            <a-select v-model:value="formData.refTarget"
+                                      :options="getEnumByType(6)" placeholder="请选择输出参考"
+                                      show-search
+                                      :filter-option="filterOption" />
+
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+                <a-row justify="start">
+                    <a-col span="24">
+                        <a-form-item>
+                            <ChoiceSkill v-model:saddRef="formData.saddRef" :isModal="false">
+                            </ChoiceSkill>
                         </a-form-item>
                     </a-col>
                 </a-row>
@@ -140,7 +153,7 @@ import { saveBuf } from "@/api/skillBufApi";
 import { ISkillBufForm } from '@/interface/skillBufType';
 import { message } from 'ant-design-vue';
 import useSkillBuf from "../hooks/skillBuf";
-// import AreaServer from "@/components/AreaServer/index.vue";
+import ChoiceSkill from "@/components/ChoiceSkill/index.vue";
 const props = defineProps({
     title: {
         type: String,
@@ -185,5 +198,11 @@ const handleOk = async () => {
 </script>
     
 
-<style lang="scss" >
+<style lang="scss">
+.edit-buf-modal {
+    .ant-modal-body {
+        max-height: 80vh;
+        overflow: auto;
+    }
+}
 </style>
