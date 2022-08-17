@@ -1,3 +1,10 @@
+<!--
+ * @Description: 文件描述
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-17 16:50:37
+-->
 <script lang="tsx">
 import { defineComponent } from "vue";
 import { Tag } from 'ant-design-vue';
@@ -19,10 +26,10 @@ export default defineComponent({
                         {
                               state.routeHistorys.map(item => {
                                     return (
-                                          <Tag class={{ active: route.path === item.path }}
+                                          <Tag class={{ active: decodeURI(route.path) === item.path }}
                                                 closable
                                                 onClose={removeRouteHistory(item, route.path === item.path)}
-                                                key={item.id}
+                                                key={item.path}
                                           >
                                                 <span onClick={routerLinkHander(item.path)}>{setTabName(item.path, item.name)}</span>
                                           </Tag>

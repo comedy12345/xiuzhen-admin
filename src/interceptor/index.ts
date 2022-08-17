@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 14:27:01
+ * @LastEditTime: 2022-08-17 14:05:03
  */
 
 import { router } from '@/route';
@@ -45,10 +45,10 @@ router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext)
  */
 const saveRouteHistory = (to: RouteLocationNormalized) => {
       const { $state: { routeHistorys, selectdOpenKeys }, editSelectdOpenKeys } = useRouteHistoryStore();
-      getPath("", "", selectdOpenKeys, editSelectdOpenKeys, false, to.path);
+      getPath("", "", selectdOpenKeys, editSelectdOpenKeys, false, decodeURI(to.path));
 
-      if (!routeHistorys.find((item: { path: string; }) => item.path === to.path)) {
-            routeHistorys.push({ id: String(new Date().getTime()), name: String(to.name), path: to.path })
+      if (!routeHistorys.find((item: { path: string; }) => decodeURI(item.path) === decodeURI(to.path))) {
+            routeHistorys.push({ id: String(new Date().getTime()), name: String(to.name), path: decodeURI(to.path) })
       }
 }
 

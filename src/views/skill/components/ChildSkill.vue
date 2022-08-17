@@ -1,32 +1,35 @@
+
 <template>
     <div class="child-skill">
-        <a-modal style="top: 20px"
+        <a-modal centered
                  v-model:visible="showList"
                  title="子技能列表"
                  width="80%"
-                 :bodyStyle="{ height: '75vh', overflow: 'auto' }"
+                 :bodyStyle="{ overflow: 'auto' }"
                  :confirm-loading="confirmLoading"
                  class="child-modal"
+                 cancelText="取消" okText="保存"
                  @ok="handlerSaveSkill"
                  @cancel="handlerClose">
             <div>
-                <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true">
+                <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true" type="primary">
                     选择子技能
                 </a-button>
-                <SkillTable :dataSource="dataSource" :isChild="true"
-                            @del-skill="handlerDelSkill"
-                            :isSort="true">
+                <SkillTable :dataSource="dataSource" :isChild="true" :isSort="true"
+                            @del-skill="handlerDelSkill">
                 </SkillTable>
             </div>
         </a-modal>
-        <a-modal style="top: 20px"
+        <a-modal centered
                  v-model:visible="showAddList"
                  title="选择子技能"
                  width="80%"
+                 cancelText="取消" okText="确定"
                  @ok="handlerOk">
             <SkillTable :isChild="true"
                         :selectedRowKeys="selectedRowKeys"
-                        @get-Select-skill="getSelectSkills">
+                        @get-Select-skill="getSelectSkills"
+                        @get-select-all-skill="getSelectAllSkills">
             </SkillTable>
         </a-modal>
     </div>
@@ -34,29 +37,29 @@
     
 <script setup lang='ts'>
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
-import { onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
+import { reactive, ref, toRefs, watchEffect } from 'vue';
 import SkillTable from "./SkillTable.vue";
 import { saveSkill, getChildSkill } from '@/api/skillApi';
 import { message } from 'ant-design-vue';
-import { uniqBy } from "lodash";
 import { IBaseQueryParameter } from '@/interface/types';
 const props = defineProps({
-    cucrrentSkill: {
-        type: Object as () => ISkillList,
-        default: {}
+    skillTid: {
+        type: String,
+        default: ''
     },
 })
 
-const { cucrrentSkill } = toRefs(props)
+const { skillTid } = toRefs(props)
 const emit = defineEmits(['close', 'ok']);
-// 是否子技能排序列表
+// 弹出层开关
 const showList = ref(false);
-// 是否选择子技能列表
 const showAddList = ref(false);
-// 当前选中技能
+
+
+// 点确定之前选择的的技能
 const slectedSkills = ref<ISkillList[]>([]);
 
-// 获取选中数据
+// 点击选择或取消选择
 const getSelectSkills = (skill: ISkillList, selected: boolean) => {
     if (selected) {
         slectedSkills.value.push(skill);
@@ -67,27 +70,43 @@ const getSelectSkills = (skill: ISkillList, selected: boolean) => {
     selectedRowKeys.value = selectedRowKeys.value.filter(item => item !== skill.tid);
 }
 
-
-// 删除数据
-const handlerDelSkill = (skills: ISkillList[]) => {
-    dataSource.value = skills;
+// 全选或反选
+const getSelectAllSkills = (selected: boolean, skills: ISkillList[]) => {
+    if (selected) {
+        slectedSkills.value.push(...skills);
+        selectedRowKeys.value.push(...skills.map(item => item.tid));
+        return;
+    }
+    const newSkills = skills.reduce((preV: ISkillList[], curV: ISkillList): ISkillList[] => {
+        const index = preV.findIndex(item => item.tid === curV.tid);
+        if (index !== -1) {
+            preV.splice(index, 1);
+        }
+        return preV;
+    }, slectedSkills.value);
+    selectedRowKeys.value = newSkills.map(item => item.tid);
 }
 
-// 存储当前确定选择的子技能列表
+
+const handlerDelSkill = (skills: ISkillList[]) => {
+    slectedSkills.value = skills;
+    dataSource.value = skills;
+    selectedRowKeys.value = skills.map(item => item.tid);
+}
+
+// 存储确定选择的技能
 const dataSource = ref<ISkillList[]>([]);
 
-// 确定选择
 const handlerOk = () => {
-    dataSource.value = uniqBy([...dataSource.value, ...slectedSkills.value], 'tid');
+    dataSource.value = slectedSkills.value;
     showAddList.value = false;
 }
 
 // 存储子技能提交数据
 const skillForm = ref<ISkillForm>({});
 const confirmLoading = ref(false);
-// 提交选择
 const handlerSaveSkill = async () => {
-    skillForm.value!.tid = cucrrentSkill.value.tid;
+    skillForm.value!.tid = skillTid.value;
     skillForm.value.combineSkLs = dataSource.value.map(item => {
         const id = item.sid;
         return id;
@@ -103,6 +122,8 @@ const handlerClose = () => {
     showList.value = false;
     emit('close');
 }
+
+// 已选中的tid
 const selectedRowKeys = ref<string[]>([]);
 
 const queryParameter = reactive<IBaseQueryParameter>({
@@ -112,13 +133,14 @@ const queryParameter = reactive<IBaseQueryParameter>({
 });
 // 初始化子技能列表
 const getChild = async () => {
-    queryParameter.columns = [{ func: 'eq', name: 'tid', value: cucrrentSkill.value.tid }];
+    queryParameter.columns = [{ func: 'eq', name: 'tid', value: skillTid.value }];
     const { data: { records } } = await getChildSkill(queryParameter);
     dataSource.value = records;
+    slectedSkills.value = records;
     selectedRowKeys.value = records.map(item => item.tid);
 }
 watchEffect(() => {
-    if (cucrrentSkill.value.tid) {
+    if (skillTid.value) {
         getChild();
     }
 })

@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:45
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 11:14:44
+ * @LastEditTime: 2022-08-17 15:58:45
  */
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -12,6 +12,7 @@ import { resolve } from 'path';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import VueSetupExtend from 'vite-plugin-vue-setup-extend';
 
 
 const serveConfig = {
@@ -24,6 +25,7 @@ const serveConfig = {
         AntDesignVueResolver({ importStyle: true, resolveIcons: true })
       ]
     }),
+    VueSetupExtend()
   ],
 
   resolve: {

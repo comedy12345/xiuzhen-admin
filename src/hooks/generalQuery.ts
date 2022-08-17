@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 14:10:33
+ * @LastEditTime: 2022-08-17 10:12:46
  */
 import { IBaseQueryParameter, IColumn } from "@/interface/types";
 import { ColumnType, FilterDropdownProps } from "ant-design-vue/es/table/interface";
@@ -13,10 +13,9 @@ export default function (queryParameter: IBaseQueryParameter, getList?: Function
 
     //查询
     const handleSearch = (props: FilterDropdownProps<ColumnType>) => {
-
         const { selectedKeys, confirm, column: { key } } = props;
-        const keySp = key?.toString().split('Str')[0]
-        const columnIndex = queryParameter.columns?.findIndex(item => item.name === key);
+        const keySp = key?.toString().split('Str')[0];
+        const columnIndex = queryParameter.columns?.findIndex(item => item.name === keySp);
         const column: IColumn = { func: 'eq', name: keySp!, value: selectedKeys[0] };
         if (columnIndex != -1) queryParameter.columns?.splice(columnIndex!, 1, column);
         else queryParameter.columns?.push(column);

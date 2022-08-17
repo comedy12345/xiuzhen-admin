@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 13:52:15
+ * @LastEditTime: 2022-08-17 17:03:38
 -->
 
 <script lang="tsx">
@@ -142,7 +142,7 @@ const GameServicesTable = defineComponent({
         !isChildren.value && (childrenSlot.expandedRowRender = (obj: any) => childrenTable(obj))
 
         return () => (
-            <>
+            <div>
                 {isChildren.value || <HeadActions onRefreshTable={() => getList()} ></HeadActions>}
 
                 <div class="table-box">
@@ -162,7 +162,7 @@ const GameServicesTable = defineComponent({
                     </Table>
                     {editGameServicesBox()}
                 </div>
-            </>
+            </div>
         )
     }
 })

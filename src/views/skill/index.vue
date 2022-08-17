@@ -1,44 +1,44 @@
+<!--
+ * @Description: 技能管理页面
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-17 16:11:52
+-->
 <template>
     <div class="skill-container">
         <HeaderOperation @refresh-table="() => skillTableRef?.getSkills()"></HeaderOperation>
-        <SkillTable @child-skill="handlerChildSkill" ref="skillTableRef">
-        </SkillTable>
-        <ChildSkill v-if="childSkillShow" ref="childSkillRef" :cucrrentSkill="cucrrentSkill"
-                    @close="handlerClose" @ok="() => skillTableRef?.getSkills()"></ChildSkill>
+        <SkillTable ref="skillTableRef" @child-skill="handlerChildSkill"></SkillTable>
+        <ChildSkill v-if="childSkillShow" ref="childSkillRef" :skill-tid="skillTid"
+                    @close="handlerClose" @ok="() => skillTableRef?.getSkills()">
+        </ChildSkill>
     </div>
 </template>
     
-<script setup lang='ts'>
+
+<script setup lang='ts' name="/skill">
 import HeaderOperation from './components/HeaderOperation.vue';
 import SkillTable from './components/SkillTable.vue';
-import ChildSkill from './components/ChildSkill.vue'
+import ChildSkill from './components/ChildSkill.vue';
 import { nextTick, ref } from 'vue';
-import { ISkillList } from '@/interface/skillTypes';
 
 const childSkillRef = ref<InstanceType<typeof ChildSkill> | null>(null);
 
 const skillTableRef = ref<InstanceType<typeof SkillTable> | null>(null);
 
 const childSkillShow = ref(false);
-const cucrrentSkill = ref<ISkillList>()
+const skillTid = ref('')
 // 打开子技能弹出层
-const handlerChildSkill = (skill: ISkillList) => {
+const handlerChildSkill = (tid: string) => {
     childSkillShow.value = true;
     nextTick(() => {
         childSkillRef.value!.showList = true;
-        cucrrentSkill.value = skill;
+        skillTid.value = tid;
     })
 }
 const handlerClose = () => {
     childSkillShow.value = false;
 }
-
-
 </script>
-<style>
-.skill-container {
-    /* min-width: 1240px;
-    margin: 0 auto; */
-}
-</style>
+
     

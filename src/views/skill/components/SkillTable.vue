@@ -8,7 +8,7 @@
                  :pagination="!isSort ? pagination : false"
                  :row-selection="isChild && !isSort ? rowSelection : undefined"
                  :sticky="{ offsetHeader: !isSort ? -21 : 0 }"
-                 :scroll="{ x: 1200, y: 400 }"
+                 :scroll="{ x: 1200 }"
                  @change="handleTableChange">
             <template #customFilterDropdown="props">
                 <div v-if="props.column.key === 'skillName'" class="skill-query-box">
@@ -20,7 +20,7 @@
                                  @handle-search="(e) => handleSearch(e)">
                     </QueryFooter>
                 </div>
-                <div v-else-if="props.column.key === 'passivity' || props.column.key === 'isCombine'"
+                <div v-else-if="props.column.key === 'passivityStr' || props.column.key === 'isCombineStr'"
                      class="skill-query-box">
 
                     <a-radio-group :value="props.selectedKeys[0]"
@@ -60,7 +60,7 @@
 
                         <a-button v-if="record.isCombine === 1 && !isSort" type="text"
                                   style="color: #1890FF;"
-                                  @click="handlerChildSkill(record)">
+                                  @click="handlerChildSkill(record.tid)">
                             子技能
                         </a-button>
                         <a-button v-if="!isSort" type="text" style="color: #1890FF;"
@@ -87,7 +87,7 @@
     
 <script setup lang='ts'>
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
-import { computed, nextTick, onMounted, reactive, ref, toRaw, toRefs, watchEffect } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import EditSkill from '../components/EditSkill.vue';
 import { deleteSkill, querySkills } from '@/api/skillApi';
@@ -100,7 +100,6 @@ import useGeneralQuery from "@/hooks/generalQuery";
 import AreaServer from '@/components/AreaServer/index.vue';
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import Sortable from "sortablejs";
-import { cloneDeep } from 'lodash';
 
 const props = defineProps({
     isChild: {
@@ -121,7 +120,7 @@ const props = defineProps({
     }
 })
 const { isChild, dataSource, isSort, selectedRowKeys } = toRefs(props)
-const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill']);
+const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill']);
 const showEditSkill = ref(false);
 const router = useRouter();
 const editTid = ref('');
@@ -187,6 +186,10 @@ const rowSelection = ref<TableProps['rowSelection']>({
     onSelect: (record, selected): void => {
         emit('get-Select-skill', record, selected);
     },
+    onSelectAll: (selected, selectedRows, changeRows): void => {
+        emit('get-Select-all-skill', selected, changeRows);
+        // console.log(selected, selectedRowKeys, changeRows)
+    }
 });
 
 // 字段过滤
@@ -223,6 +226,7 @@ const initSortable = () => {
 }
 
 onMounted(() => {
+    // 技能排序
     if (isSort.value) {
         watchEffect(() => {
             tableData.value.records = dataSource.value;
@@ -232,6 +236,7 @@ onMounted(() => {
         })
         return;
     }
+    // 选择技能
     if (isChild.value) {
         queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
         nextTick(() => {
@@ -245,8 +250,8 @@ onMounted(() => {
 
 
 // 监听点击子技能管理
-const handlerChildSkill = (skill: ISkillList) => {
-    emit("child-Skill", skill);
+const handlerChildSkill = (tid: string) => {
+    emit("child-Skill", tid);
 }
 
 defineExpose({
@@ -264,11 +269,6 @@ defineExpose({
 
 
     :deep(.ant-table-wrapper) {
-        .ant-table-row-level-0 {
-            color: rgb(105, 105, 105);
-            font-weight: 550;
-        }
-
         .action {
             display: flex;
             flex-wrap: wrap;

@@ -1,9 +1,9 @@
 /*
- * @Description: 存储路由历史和当前打开路由
+ * @Description: 当前打开的tag
  * @Author: ljf
  * @Date: 2022-07-13 17:07:45
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:09:40
+ * @LastEditTime: 2022-08-17 16:28:43
  */
 
 import { defineStore } from 'pinia';

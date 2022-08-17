@@ -1,10 +1,17 @@
+/*
+ * @Description: 技能buf配置数据
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-17 11:34:26
+ */
 import { ColumnsType } from "ant-design-vue/es/table";
 
 export const columns: ColumnsType = [
     // { title: "所在区", key: 'domainId', dataIndex: 'domainId', align: 'center' },
     { title: "固定值", key: 'sid', dataIndex: 'sid', align: 'center', width: 100, fixed: 'left', customFilterDropdown: true, },
     { title: "所属技能", key: 'skillSid', dataIndex: 'skillSid', align: 'center', width: 200, fixed: 'left' },
-    { title: "技能特性", key: 'bufTypeStr', dataIndex: 'bufTypeStr', align: 'center', width: 120, customFilterDropdown: true, },
+    { title: "buf特性", key: 'bufTypeStr', dataIndex: 'bufTypeStr', align: 'center', width: 120, customFilterDropdown: true, },
     { title: "出招顺序", key: 'orderIdx', dataIndex: 'orderIdx', align: 'center', width: 100, },
     { title: "触发几率", key: 'triggerOdds', dataIndex: 'triggerOdds', align: 'center', width: 100, },
     { title: "执行结果", key: 'resultTypeStr', dataIndex: 'resultTypeStr', align: 'center', width: 120, customFilterDropdown: true, },
@@ -24,4 +31,7 @@ export const columns: ColumnsType = [
     { title: "更新人", key: 'updateBy', dataIndex: 'updateBy', align: 'center', width: 100, },
     { title: "操作", key: 'action', dataIndex: 'action', align: 'center', width: 100, fixed: 'right' },
 ];
+
+
+
 

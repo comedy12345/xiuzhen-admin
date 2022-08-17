@@ -134,11 +134,12 @@
 </template>
     
 <script setup lang='ts'>
-import { onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
+import { onMounted, ref, toRefs, watchEffect } from 'vue';
 import { useRoute } from 'vue-router'
-import { queryBufTypeEnums, saveBuf } from "@/api/skillBufApi";
-import { ISelectDatas, ISelectOptionVoList, ISkillBufForm } from '@/interface/skillBufType';
+import { saveBuf } from "@/api/skillBufApi";
+import { ISkillBufForm } from '@/interface/skillBufType';
 import { message } from 'ant-design-vue';
+import useSkillBuf from "../hooks/skillBuf";
 // import AreaServer from "@/components/AreaServer/index.vue";
 const props = defineProps({
     title: {
@@ -153,27 +154,12 @@ const props = defineProps({
 const { title, formDataProp } = toRefs(props);
 const emit = defineEmits(['close-Edit', 'on-ok']);
 const route = useRoute();
+// buf枚举下拉
+const { getEnumByType, filterOption } = useSkillBuf();
 
-// 调接口获取所有下拉数据
-const bufSelects = ref<ISelectDatas[]>([]);
-const getBufSelects = async () => {
-    const { data } = await queryBufTypeEnums();
-    bufSelects.value = data;
-}
-// 通过类型查出对应枚举
-const getEnumByType = (type: number) => {
-    return bufSelects.value.find(item => item.type === type)?.selectOptionVoList.map(item => {
-        item.label = item.name;
-        item.value = item.val;
-        return item;
-    });
-}
-const filterOption = (input: string, option: ISelectOptionVoList) => {
-    return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
 onMounted(() => {
     visible.value = true;
-    getBufSelects();
+
 })
 
 const formData = ref<ISkillBufForm>({

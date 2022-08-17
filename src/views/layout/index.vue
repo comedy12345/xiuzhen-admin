@@ -1,6 +1,6 @@
 
 <script lang="tsx">
-import { defineComponent, ref, provide } from "vue";
+import { defineComponent, ref, provide, KeepAlive, toRefs } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import { Layout, LayoutContent, LayoutHeader, LayoutSider, Menu } from 'ant-design-vue';
 import MyMenuItem from '@/components/MenuItem/index.vue';
@@ -15,31 +15,39 @@ export default defineComponent({
             const collapsed = ref<boolean>(false);
             const route = useRoute();
             provide('collapsed', collapsed);
-            const { $state: { selectdOpenKeys }, editSelectdOpenKeys } = useRouteHistoryStore();
-
+            const { $state, editSelectdOpenKeys } = useRouteHistoryStore();
+            const { routeHistorys, selectdOpenKeys } = toRefs($state);
             return () => (
                   <Layout hasSider={true}>
-                        <Layout hasSider={true}>
-                              <LayoutSider theme='dark' collapsible={true} trigger={null} collapsed={collapsed.value}>
-                                    <div class="sider-header">
-                                          <img src='https://www.surely.cool/surely-vue-logo.png' />
-                                          {collapsed.value || <span>修真游戏管理系统</span>}
-                                    </div>
-                                    <Menu mode="inline" theme='dark'
-                                          selectedKeys={[route.path]} openKeys={selectdOpenKeys}
-                                          onOpenChange={(openKeys: Key[]) => editSelectdOpenKeys(openKeys, "upd")}>
-                                          <MyMenuItem routesMenu={routes[0].children} />
-                                    </Menu>
-                              </LayoutSider>
-                              <LayoutContent class="layout-content">
-                                    <LayoutHeader class='layout-header' >
-                                          <MyHeader />
-                                    </LayoutHeader>
-                                    <div class="layout-content-main">
-                                          <RouterView></RouterView>
-                                    </div>
-                              </LayoutContent>
-                        </Layout>
+                        <LayoutSider theme='dark' collapsible={true} trigger={null} collapsed={collapsed.value}>
+                              <div class="sider-header">
+                                    <img src='https://www.surely.cool/surely-vue-logo.png' />
+                                    {collapsed.value || <span>修真游戏管理系统</span>}
+                              </div>
+                              <Menu mode="inline" theme='dark'
+                                    selectedKeys={[route.path]} openKeys={selectdOpenKeys.value}
+                                    onOpenChange={(openKeys: Key[]) => editSelectdOpenKeys(openKeys, "upd")}>
+                                    <MyMenuItem routesMenu={routes[0].children} />
+                              </Menu>
+                        </LayoutSider>
+                        <LayoutContent class="layout-content">
+                              <LayoutHeader class='layout-header' >
+                                    <MyHeader />
+                              </LayoutHeader>
+                              <div class="layout-content-main">
+                                    <RouterView>
+                                          {{
+                                                default: ({ Component }: { Component: any }) => {
+                                                      return (
+                                                            <KeepAlive include={routeHistorys.value.map(item => item.path)}>
+                                                                  <Component />
+                                                            </KeepAlive>
+                                                      )
+                                                }
+                                          }}
+                                    </RouterView>
+                              </div>
+                        </LayoutContent>
                   </Layout>
             )
       }

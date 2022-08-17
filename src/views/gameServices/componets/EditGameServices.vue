@@ -3,13 +3,11 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 11:38:23
+ * @LastEditTime: 2022-08-17 16:28:22
 -->
 <template>
     <a-modal v-model:visible="visible" :title="title" @ok="handleOk" @cancel="handleCancel"
-             ok-text="保存"
-             cancel-text="取消" :confirm-loading="confirmLoading">
-
+             ok-text="保存" cancel-text="取消" :confirm-loading="confirmLoading">
         <a-form ref="gameServicesFormRef" :model="gameServicesForm" name="gameServicesForm"
                 autocomplete="off"
                 :label-col="{ span: 6, }">
