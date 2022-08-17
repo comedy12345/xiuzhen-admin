@@ -16,20 +16,20 @@
                 </a-form-item>
 
                 <a-form-item label="技能名称" :label-col="{ span: 6 }">
-                    <a-input v-model:value="formData.skillName" />
+                    <a-input v-model:value="formData.skillName" placeholder="请输入技能名称" />
                 </a-form-item>
 
                 <a-form-item label="固定编号" :label-col="{ span: 6 }">
-                    <a-input v-model:value="formData.sid" />
+                    <a-input v-model:value="formData.sid" placeholder="请输入固定编号" />
                 </a-form-item>
 
                 <a-form-item label="消耗属性" :label-col="{ span: 6 }">
                     <a-select v-model:value="formData.expendProp"
-                              :options="[{ label: '能量', value: 1 }]" />
+                              :options="[{ label: '能量', value: 1 }]" placeholder="请选择消耗属性" />
                 </a-form-item>
 
                 <a-form-item label="消耗值" :label-col="{ span: 6 }">
-                    <a-input v-model:value="formData.expendVal" />
+                    <a-input v-model:value="formData.expendVal" placeholder="请输入消耗值" />
                 </a-form-item>
 
                 <a-form-item label="是否被动技能" :label-col="{ span: 6 }">
