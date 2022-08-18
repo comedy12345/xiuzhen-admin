@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 17:03:38
+ * @LastEditTime: 2022-08-18 10:08:05
 -->
 
 <script lang="tsx">
@@ -131,7 +131,7 @@ const GameServicesTable = defineComponent({
         }
         // 子表格（区）
         const childrenTable = (obj: any) => {
-            return <GameServicesTable isChildren={true} parentTid={obj.record.tid}></GameServicesTable>
+            return <GameServicesTable isChildren={true} parentTid={obj.record.tid as string}></GameServicesTable>
         }
 
         // table插槽

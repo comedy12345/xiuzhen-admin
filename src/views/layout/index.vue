@@ -22,7 +22,7 @@ export default defineComponent({
                         <LayoutSider theme='dark' collapsible={true} trigger={null} collapsed={collapsed.value}>
                               <div class="sider-header">
                                     <img src='https://www.surely.cool/surely-vue-logo.png' />
-                                    {collapsed.value || <span>修真游戏管理系统</span>}
+                                    {collapsed.value || <span>修真后台管理</span>}
                               </div>
                               <Menu mode="inline" theme='dark'
                                     selectedKeys={[route.path]} openKeys={selectdOpenKeys.value}
@@ -63,11 +63,12 @@ export default defineComponent({
             height: 60px;
             line-height: 60px;
             color: rgb(255, 255, 255);
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
+            letter-spacing: 4px;
 
             img {
                   width: 18px;

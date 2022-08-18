@@ -1,3 +1,10 @@
+/*
+ * @Description: 路由信息
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-18 09:56:15
+ */
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
@@ -10,16 +17,19 @@ export const routes: RouteRecordRaw[] = [
                   {
                         name: '首页',
                         path: '/dashboard',
+                        meta: { icon: 'dashboard-two-tone' },
                         component: () => import('@/views/home/index.vue'),
                   },
                   {
                         name: '游戏服务',
                         path: '/gameServices',
+                        meta: { icon: 'cluster-outlined' },
                         component: () => import('@/views/gameServices/index.vue'),
                   },
                   {
                         name: '技能管理',
                         path: '/skill',
+                        meta: { icon: 'bulb-outlined' },
                         component: () => import('@/views/skill/index.vue'),
 
                   },
@@ -31,12 +41,14 @@ export const routes: RouteRecordRaw[] = [
                   {
                         name: '用户管理',
                         path: '/user',
+                        meta: { icon: 'user-outlined' },
                         component: () => import('@/views/user/index.vue'),
 
                   },
                   {
                         name: '伙伴管理',
                         path: '/partner',
+                        meta: { icon: 'team-outlined' },
                         component: () => import('@/views/partner/index.vue'),
 
                   },
