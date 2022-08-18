@@ -53,11 +53,15 @@
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
 import { reactive, ref, toRefs, watchEffect } from 'vue';
 import SkillTable from "@/components/SkillTable/index.vue";
-import { saveSkill, getChildSkill } from '@/api/skillApi';
+import { saveSkill, getChildSkill, getSkilldd } from '@/api/skillApi';
 import { message } from 'ant-design-vue';
 import { IBaseQueryParameter } from '@/interface/types';
 const props = defineProps({
     skillTid: {
+        type: String,
+        default: ''
+    },
+    bufTid: {
         type: String,
         default: ''
     },
@@ -71,7 +75,7 @@ const props = defineProps({
     }
 })
 
-const { skillTid, isModal } = toRefs(props)
+const { skillTid, isModal, bufTid } = toRefs(props)
 const emit = defineEmits(['close', 'ok', 'update:saddRef']);
 // 弹出层开关
 const showList = ref(false);
@@ -160,20 +164,25 @@ const queryParameter = reactive<IBaseQueryParameter>({
     current: 1,
     columns: []
 });
-// 初始化子技能列表
-const getChild = async () => {
-    // 要是弹窗形式的用tid去回显
-    if (isModal.value) queryParameter.columns = [{ func: 'eq', name: 'tid', value: skillTid.value }];
 
+const getChild = async () => {
+    queryParameter.columns = [{ func: 'eq', name: 'tid', value: skillTid.value }];
     const { data: { records } } = await getChildSkill(queryParameter);
     dataSource.value = records;
     slectedSkills.value = records;
     selectedRowKeys.value = records.map(item => item.tid);
 }
+
+const getBufSkill = async () => {
+    const { data } = await getSkilldd({ tid: bufTid.value });
+    dataSource.value = data;
+    slectedSkills.value = data;
+    selectedRowKeys.value = data.map((item) => item.tid);
+}
+
 watchEffect(() => {
-    if (skillTid.value) {
-        getChild();
-    }
+    if (skillTid.value) getChild();
+    if (bufTid.value) getBufSkill();
 })
 
 defineExpose({

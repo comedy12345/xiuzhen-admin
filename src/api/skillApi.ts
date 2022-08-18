@@ -55,3 +55,12 @@ export const getChildSkill = (data: IBaseQueryParameter, loading?: Ref<boolean>)
     })
 }
 
+export const getSkilldd = (data: { tid: string }, loading?: Ref<boolean>): Promise<IBaseResp<ISkillList[]>> => {
+    return useHttp<IBaseResp<ISkillList[]>>({
+        url: '/api/admin/role/skill/sadd-skill-list-query',
+        method: "POST",
+        data,
+        loading
+    })
+}
+

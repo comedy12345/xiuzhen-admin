@@ -135,7 +135,8 @@
                 <a-row justify="start">
                     <a-col span="24">
                         <a-form-item>
-                            <ChoiceSkill v-model:saddRef="formData.saddRef" :isModal="false">
+                            <ChoiceSkill v-model:saddRef="formData.saddRef" :buf-tid="formData.tid"
+                                         :isModal="false">
                             </ChoiceSkill>
                         </a-form-item>
                     </a-col>

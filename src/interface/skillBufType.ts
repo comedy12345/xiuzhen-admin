@@ -44,7 +44,7 @@ export interface ISkillBufForm {
     sid?: string;
     // 固定技能sid  
     skillSid?: string;
-    tid?: bigint;
+    tid?: string;
     // 触发机率
     triggerOdds?: number;
     // 追加技能
