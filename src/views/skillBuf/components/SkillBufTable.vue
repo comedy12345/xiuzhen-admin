@@ -83,6 +83,7 @@ const pagination = computed(() => ({
     total: tableData.value?.total,
     current: tableData.value?.current,
     pageSize: tableData.value?.size,
+    showTotal: (total: number) => '总数 ' + total + ' 条'
 }));
 
 // 查询参数

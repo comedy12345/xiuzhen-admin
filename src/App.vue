@@ -1,9 +1,18 @@
+<!--
+ * @Description: 顶级组件
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-18 09:14:42
+-->
 
 <script lang="tsx">
 import { defineComponent, toRefs } from 'vue';
-import { Progress } from 'ant-design-vue';
+import { Progress, ConfigProvider } from 'ant-design-vue';
 // import Layout from "@/views/layout/index.vue";
 import useProgressStore from "@/store/progress";
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+
 import { RouterView } from "vue-router";
 export default defineComponent({
   setup() {
@@ -11,10 +20,10 @@ export default defineComponent({
     const { status, rateOrogress } = toRefs(progressStore);
     return () => (
       <div class="app">
-        <>
+        <ConfigProvider locale={zhCN}>
           {status?.value && <Progress percent={rateOrogress?.value} strokeWidth={3} show-info={false} />}
           <RouterView></RouterView>
-        </>
+        </ConfigProvider>
       </div >
     )
   },

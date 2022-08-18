@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 14:10:52
+ * @LastEditTime: 2022-08-18 09:07:43
  */
 
 import { computed, onMounted, reactive, ref } from "vue";
@@ -34,6 +34,7 @@ export default function (parentTid: String) {
         total: tableData.value?.total,
         current: tableData.value?.current,
         pageSize: tableData.value?.size,
+        showTotal: (total: number) => '总数 ' + total + ' 条'
     }));
 
     // 表格数据
