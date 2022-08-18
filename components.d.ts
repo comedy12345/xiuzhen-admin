@@ -9,14 +9,10 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ABadge: typeof import('ant-design-vue/es')['Badge']
     AButton: typeof import('ant-design-vue/es')['Button']
-    ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     ACol: typeof import('ant-design-vue/es')['Col']
-    ADescriptions: typeof import('ant-design-vue/es')['Descriptions']
-    ADescriptionsItem: typeof import('ant-design-vue/es')['DescriptionsItem']
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AInput: typeof import('ant-design-vue/es')['Input']
-    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     AlibabaOutlined: typeof import('@ant-design/icons-vue')['AlibabaOutlined']
     AModal: typeof import('ant-design-vue/es')['Modal']
     APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
@@ -32,7 +28,6 @@ declare module '@vue/runtime-core' {
     ATable: typeof import('ant-design-vue/es')['Table']
     ChoiceSkill: typeof import('./src/components/ChoiceSkill/index.vue')['default']
     GithubOutlined: typeof import('@ant-design/icons-vue')['GithubOutlined']
-    LockOutlined: typeof import('@ant-design/icons-vue')['LockOutlined']
     MenuItem: typeof import('./src/components/MenuItem/index.vue')['default']
     MyBreadcrumb: typeof import('./src/components/MyBreadcrumb/index.vue')['default']
     MyHeader: typeof import('./src/components/MyHeader/index.vue')['default']
@@ -43,6 +38,5 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SkillTable: typeof import('./src/components/SkillTable/index.vue')['default']
     SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
-    UserOutlined: typeof import('@ant-design/icons-vue')['UserOutlined']
   }
 }
