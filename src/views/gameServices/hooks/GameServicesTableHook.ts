@@ -16,11 +16,10 @@ import { IBaseQueryParameter } from '@/interface/types';
 import useGeneralQuery from '@/hooks/generalQuery';
 
 export default function (parentTid: String) {
-
+    const isShowEdit = ref(false);
     let loading = ref(false);
-
-    // 编辑框Ref
     const editGameServicesRef = ref<InstanceType<typeof EditGameServices> | null>(null);
+
 
     // 查询参数
     const queryParameter = reactive<IBaseQueryParameter>({
@@ -57,6 +56,7 @@ export default function (parentTid: String) {
 
     // 编辑
     const editHandle = (gameService: IGameServicesList) => {
+        isShowEdit.value = true;
         editGameServicesRef.value!.visible = true;
         editGameService.value = ({ ...gameService } as IGameServicesForm);
     }
@@ -85,11 +85,12 @@ export default function (parentTid: String) {
 
     return {
         loading,
-        editGameServicesRef,
         queryParameter,
         tableData,
         pagination,
         editGameService,
+        isShowEdit,
+        editGameServicesRef,
         handleTableChange,
         editHandle,
         getList,

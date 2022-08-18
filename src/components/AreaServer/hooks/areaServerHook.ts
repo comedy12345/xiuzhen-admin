@@ -7,6 +7,7 @@ export default function () {
     const queryData: IBaseQueryParameter = {
         current: 1,
         size: 999,
+        columns: [{ func: 'neq', name: 'parentTid', value: 0 }]
 
     };
     const options = ref<CascaderProps['options']>([]);

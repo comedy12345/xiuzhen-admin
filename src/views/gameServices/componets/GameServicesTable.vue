@@ -14,7 +14,7 @@ import QueryFooter from '@/components/QueryFooter/index.vue';
 import EditGameServices from './EditGameServices.vue';
 import HeadActions from "./HeadActions.vue";
 import useGameServicesTable from "../hooks/GameServicesTableHook";
-import { defineComponent, toRefs, computed } from "vue";
+import { defineComponent, toRefs, computed, watchEffect } from "vue";
 import { cloneDeep } from 'lodash';
 import { status } from "@/config/gameServicesConfig";
 import { columns } from '@/config/gameServicesConfig';
@@ -38,6 +38,7 @@ const GameServicesTable = defineComponent({
             loading,
             pagination,
             editGameService,
+            isShowEdit,
             editGameServicesRef,
             handleSearch,
             handleReset,
@@ -120,9 +121,9 @@ const GameServicesTable = defineComponent({
 
         // 编辑弹出层
         const editGameServicesBox = () => {
+            if (!isShowEdit.value) return;
             return (
-                <EditGameServices
-                    ref={editGameServicesRef}
+                <EditGameServices ref={editGameServicesRef}
                     editGameService={editGameService.value}
                     type="update"
                     onRefreshTable={() => getList()} >

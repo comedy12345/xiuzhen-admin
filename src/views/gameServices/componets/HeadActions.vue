@@ -13,7 +13,8 @@
             </template>
             新增
         </a-button>
-        <edit-game-services ref='editGameServicesRef' @success="emit('refresh-table')"></edit-game-services>
+        <edit-game-services v-if="isShowEdit" ref="editGameServicesRef"
+                            @success="emit('refresh-table')"></edit-game-services>
     </div>
 
 </template>
@@ -22,9 +23,11 @@
 import { ref } from "vue";
 import EditGameServices from './EditGameServices.vue';
 const emit = defineEmits(['refresh-table']);
-const editGameServicesRef = ref<any>(null);
+const editGameServicesRef = ref<InstanceType<typeof EditGameServices> | null>(null)
+const isShowEdit = ref(false);
 const add = () => {
-    editGameServicesRef.value.visible = true;
+    isShowEdit.value = true;
+    editGameServicesRef.value!.visible = true;
 }
 </script>
 

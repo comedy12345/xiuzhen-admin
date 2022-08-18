@@ -60,7 +60,10 @@ const props = defineProps({
 });
 const { editGameService, type } = toRefs(props)
 const emit = defineEmits(['refresh-table']);
-onMounted(() => { handleFocus() })
+onMounted(() => {
+    handleFocus()
+    visible.value = true;
+})
 
 const visible = ref(false);
 const gameServicesFormRef = ref<any>(null);
