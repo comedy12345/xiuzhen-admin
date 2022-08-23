@@ -1,19 +1,12 @@
+<!--
+ * @Description: 伙伴信息头部
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-08-23 09:38:21
+-->
 <template>
     <div class="header-operation-container">
-        <div class="query-operation-box">
-            <a-form layout="inline">
-                <a-form-item label="职业">
-                    <a-input placeholder="请输入职业名称"></a-input>
-                </a-form-item>
-
-                <a-form-item label="伙伴名称">
-                    <a-input placeholder="请输入伙伴名称"></a-input>
-                </a-form-item>
-                <a-form-item>
-                    <a-button type="primary">查询</a-button>
-                </a-form-item>
-            </a-form>
-        </div>
         <div class="other-operation-box">
             <a-button type="primary" @click="handlerAdd">新增</a-button>
         </div>
