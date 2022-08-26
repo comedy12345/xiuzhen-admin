@@ -5,14 +5,15 @@
                  :loading="tableLoading"
                  :columns="filterColumns"
                  :indentSize="40" size="small" bordered
-                 :pagination="!isSort ? pagination : false"
-                 :row-selection="isChild && !isSort ? rowSelection : undefined"
-                 :sticky="{ offsetHeader: !isSort ? -21 : 0 }"
+                 :pagination="isOpenPagination ? pagination : false"
+                 :row-selection="isOpenMultiple ? rowSelection : undefined"
+                 :sticky="{ offsetHeader: 0 }"
                  :scroll="{ x: 1200 }"
                  @change="handleTableChange">
             <template #customFilterDropdown="props">
-                <div v-if="props.column.key === 'skillName'" class="skill-query-box">
-                    <a-input placeholder="技能名称" :value="props.selectedKeys[0]"
+                <div v-if="props.column.key === 'skillName' || props.column.key === 'sid'"
+                     class="skill-query-box">
+                    <a-input :placeholder="props.column.title" :value="props.selectedKeys[0]"
                              @change="(e: ChangeEvent) => props.setSelectedKeys(e.target.value ? [e.target.value] : [])">
                     </a-input>
                     <QueryFooter :filter-dropdown-props="props"
@@ -22,17 +23,14 @@
                 </div>
                 <div v-else-if="props.column.key === 'passivityStr' || props.column.key === 'isCombineStr'"
                      class="skill-query-box">
+                    <a-select
+                              style="width: 120px;"
+                              :value="props.selectedKeys[0]"
+                              :options="[{ value: 0, label: '否' }, { value: 1, label: '是' }]"
+                              placeholder="请选择"
+                              @change="(val: SelectValue) => props.setSelectedKeys(val || val === 0 ? [val] : [])">
 
-                    <a-radio-group :value="props.selectedKeys[0]"
-                                   @change="(e: RadioChangeEvent) => props.setSelectedKeys(e.target.value || e.target.value === 0 ? [e.target.value] : [])"
-                                   button-style="solid">
-                        <a-space :size="20">
-                            <a-radio-button :value="1">是</a-radio-button>
-                            <a-radio-button :value="0">否</a-radio-button>
-                        </a-space>
-                    </a-radio-group>
-
-
+                    </a-select>
                     <QueryFooter :filter-dropdown-props="props"
                                  @handle-reset="(e) => handleReset(e)"
                                  @handle-search="(e) => handleSearch(e)">
@@ -53,23 +51,23 @@
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
                     <div class="action">
-                        <a-button v-if="!isSort" type="text" style="color: #1890FF;"
+                        <a-button v-if="!isCacheDel" type="text" style="color: #1890FF;"
                                   @click="router.push(`/skillBuf/${record.sid}/${record.skillName}技能buf管理`)">
                             技能buf
                         </a-button>
 
-                        <a-button v-if="record.isCombine === 1 && !isSort" type="text"
+                        <a-button v-if="record.isCombine === 1 && !isCacheDel" type="text"
                                   style="color: #1890FF;"
                                   @click="handlerChildSkill(record.tid)">
                             子技能
                         </a-button>
-                        <a-button v-if="!isSort" type="text" style="color: #1890FF;"
+                        <a-button v-if="!isCacheDel" type="text" style="color: #1890FF;"
                                   @click="handlerEdit(record)">
                             编辑
                         </a-button>
 
                         <a-popconfirm placement="leftTop" title="确定要删除这个技能?" ok-text="删除"
-                                      cancel-text="取消" @confirm="deleteHandle(record.tid!)">
+                                      cancel-text="取消" @confirm="deleteHandle(record)">
                             <a-button type='text' style='color: red;'>
                                 删除
                             </a-button>
@@ -87,7 +85,7 @@
     
 <script setup lang='ts'>
 import { ISkillForm, ISkillList } from '@/interface/skillTypes';
-import { computed, nextTick, onMounted, reactive, ref, toRefs, watchEffect } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref, toRefs, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import EditSkill from '@/views/skill/components/EditSkill.vue';
 import { deleteSkill, querySkills } from '@/api/skillApi';
@@ -100,31 +98,76 @@ import useGeneralQuery from "@/hooks/generalQuery";
 import AreaServer from '@/components/AreaServer/index.vue';
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import Sortable from "sortablejs";
+import { SelectValue } from 'ant-design-vue/es/select';
+import { ColumnsType } from 'ant-design-vue/es/table';
 
 const props = defineProps({
-    isChild: {
+    // 是否删除表格操作列-默认不删除
+    isDelAction: {
         type: Boolean,
-        defalut: false
+        default: false
+    },
+    // 是否是缓存内删除-默认不是
+    isCacheDel: {
+        type: Boolean,
+        default: false
+    },
+    // 是否只查询非组合技能-默认不是
+    isCombine: {
+        type: Boolean,
+        default: false
+    },
+    // 是否隐藏表格自定义筛选项-默认不是
+    isHideScreen: {
+        type: Boolean,
+        default: false
+    },
+    // 是否开启拖拽排序-默认不开启
+    isDragSort: {
+        type: Boolean,
+        default: false
+    },
+    // 是否开启多选-默认不开启
+    isOpenMultiple: {
+        type: Boolean,
+        default: false
+    },
+    // 是否开启分页-默认开启
+    isOpenPagination: {
+        type: Boolean,
+        default: true
+    },
+    // 是否关联技能模式-默认不开启
+    isRelationSkill: {
+        type: Boolean,
+        default: false
+    },
+    // 是否单点操作，点一次请求一次
+    isSinglePoint: {
+        type: Boolean,
+        default: false
     },
     dataSource: {
         type: Object as () => ISkillList[],
         default: []
     },
-    isSort: {
-        type: Boolean,
-        default: false
-    },
     selectedRowKeys: {
         type: Array<Key>,
         default: []
     },
-    isModal: {
-        type: Boolean,
-        default: true
-    }
 })
-const { isChild, dataSource, isSort, selectedRowKeys, isModal } = toRefs(props);
-const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill']);
+const {
+    isDelAction,
+    dataSource,
+    isCacheDel,
+    selectedRowKeys,
+    isCombine,
+    isHideScreen,
+    isDragSort,
+    isOpenMultiple,
+    isOpenPagination,
+    isRelationSkill, isSinglePoint } = toRefs(props);
+const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill', 'del-skill-single']);
 const router = useRouter();
 
 
@@ -137,12 +180,16 @@ const handlerEdit = (record: ISkillForm) => {
 }
 
 // 删除
-const deleteHandle = async (tid: string) => {
-    if (isChild.value) {
-        emit('del-skill', tableData.value.records.filter(item => item.tid !== tid));
+const deleteHandle = async (record: any) => {
+    if (isSinglePoint.value) {
+        emit('del-skill-single', record.partnerSkillTid);
         return;
     }
-    const { data } = await deleteSkill(tid);
+    if (isCacheDel.value) {
+        emit('del-skill', tableData.value.records.filter(item => item.tid !== record.tid));
+        return;
+    }
+    const { data } = await deleteSkill(record.tid);
     message.success(data);
     getSkills();
 }
@@ -195,23 +242,22 @@ const rowSelection = ref<TableProps['rowSelection']>({
 
 // 字段过滤
 const filterColumns = computed(() => {
-    if (isSort.value) {
-        return columns.filter(item => {
-            return item.key !== 'isCombine' && item.key !== 'combineSkOrder';
-        }).map(item => {
-            if (item.key === 'action') {
-                item.width = 100;
-            }
+    let newColumns: ColumnsType<any> = columns;
+    // 隐藏表格筛选
+    if (isHideScreen.value) {
+        newColumns = columns.map(item => {
+            item.width = 80;
             item.customFilterDropdown = false;
             return item;
         })
-    } else if (isChild.value) {
-        return columns.filter(item => {
-            return item.key !== 'isCombine' && item.key !== 'combineSkOrder' && item.key !== 'action';
-        })
-    } else {
-        return columns;
     }
+    // 删除表格操作列
+    if (isDelAction.value) {
+        newColumns = columns.filter(item => {
+            return item.key !== 'action';
+        })
+    }
+    return newColumns;
 })
 
 const tableRef = ref<HTMLElement>();
@@ -229,27 +275,25 @@ const initSortable = () => {
 }
 
 onMounted(() => {
-    // 技能排序
-    if (isSort.value) {
+    if (isRelationSkill.value) {
+        // 技能排序
         watchEffect(() => {
             tableData.value.records = dataSource.value;
-            if (isModal.value) {
+            if (isDragSort.value && !isSinglePoint.value) {
                 nextTick(() => { initSortable() });
             }
-
         })
         return;
     }
-    // 选择技能
-    if (isChild.value) {
-        isModal.value && queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
-        nextTick(() => {
-            watchEffect(() => {
-                rowSelection.value!.selectedRowKeys = selectedRowKeys.value;
-            })
-        })
-    }
+
+    // 是否子查询非组合技能
+    isCombine.value && queryParameter.columns?.push({ func: "eq", name: 'isCombine', value: 0 });
     getSkills();
+    nextTick(() => {
+        watchEffect(() => {
+            rowSelection.value!.selectedRowKeys = selectedRowKeys.value;
+        })
+    })
 });
 
 

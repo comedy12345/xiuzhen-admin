@@ -14,7 +14,7 @@ import { SelectValue } from 'ant-design-vue/lib/select';
 const AreaServer = defineComponent({
     props: {
         value: {
-            type: String,
+            type: Number,
             default: null
         }
     },

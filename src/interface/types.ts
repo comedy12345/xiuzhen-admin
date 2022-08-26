@@ -76,3 +76,14 @@ export interface IQueryParameter {
     [key: string]: number;
 }
 
+// 下拉框数据
+export interface ISelectDatas {
+    type: number;
+    selectOptionVoList: ISelectOptionVoList[]
+}
+export interface ISelectOptionVoList {
+    name: string;
+    val: number;
+    label: string;
+    value: number;
+}

@@ -1,15 +1,9 @@
 import useHttp from "@/hooks/useHttp"
-import { ISelectDatas, ISkillBufForm, ISkillBufList } from "@/interface/skillBufType"
+import { ISkillBufForm, ISkillBufList } from "@/interface/skillBufType"
 import { IBaseQueryParameter, IBaseResp, IData } from "@/interface/types"
 import { Ref } from "vue"
 
-export const queryBufTypeEnums = (loading?: Ref<boolean>): Promise<IBaseResp<ISelectDatas[]>> => {
-    return useHttp<IBaseResp<ISelectDatas[]>>({
-        url: '/api/admin/role/skill/drop-down-list',
-        method: "POST",
-        loading
-    })
-}
+
 
 
 export const saveBuf = (data: ISkillBufForm, loading?: Ref<boolean>): Promise<IBaseResp<string>> => {
@@ -31,6 +25,15 @@ export const querySkillBufs = (data: IBaseQueryParameter, loading?: Ref<boolean>
         url: '/api/admin/role/skill/skill-bufs-query',
         method: "POST",
         data,
+        loading
+    })
+}
+
+export const deleteSkillBuf = (tid: string, loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
+    return useHttp<IBaseResp<any>>({
+        url: '/api/admin/role/skill/skill-bufs-remove',
+        method: "GET",
+        params: { tid },
         loading
     })
 }

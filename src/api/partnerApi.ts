@@ -8,6 +8,7 @@
 
 import useHttp from "@/hooks/useHttp";
 import { IPartnerForm, IPartnerList } from "@/interface/partnerType";
+import { ISkillList } from "@/interface/skillTypes";
 import { IBaseQueryParameter, IBaseResp, IData } from "@/interface/types";
 import { Ref } from "vue";
 
@@ -56,6 +57,35 @@ export const queryPartners = (data: IBaseQueryParameter, loading?: Ref<boolean>)
 export const deletePartner = (tid: string, loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
       return useHttp<IBaseResp<any>>({
             url: '/api/admin/partner/partner-remove',
+            method: "GET",
+            params: { tid },
+            loading
+      })
+}
+
+
+export const savePartnerSkill = (data: { skillSid: string, partnerSid: string }[], loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
+      return useHttp<IBaseResp<any>>({
+            url: "/api/admin/role/skill/partner-skill-add",
+            method: "POST",
+            data,
+            loading
+      })
+}
+
+export const deleteSkill = (tid: string, loading?: Ref<boolean>): Promise<IBaseResp<any>> => {
+      return useHttp<IBaseResp<any>>({
+            url: '/api/admin/role/skill/partner-skill-remove',
+            method: "GET",
+            params: { tid },
+            loading
+      })
+}
+
+export const queryPartnerSkill = (tid: number, loading?: Ref<boolean>)
+      : Promise<IBaseResp<ISkillList[]>> => {
+      return useHttp<IBaseResp<ISkillList[]>>({
+            url: '/api/admin/role/skill/partner-query-skill',
             method: "GET",
             params: { tid },
             loading

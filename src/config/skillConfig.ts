@@ -2,12 +2,22 @@ import { ColumnsType } from "ant-design-vue/es/table";
 export const getColumns = () => {
     return [
         {
+            title: '固定值',
+            key: 'sid',
+            dataIndex: 'sid',
+            align: 'center',
+            customFilterDropdown: true,
+            width: 120,
+            fixed: 'left',
+
+        },
+        {
             title: '所在区',
-            key: 'domainTidStr',
+            key: 'domainId',
             dataIndex: 'domainTidStr',
             align: 'center',
             customFilterDropdown: true,
-            width: 100,
+            width: 150,
             fixed: 'left',
 
         },
@@ -27,7 +37,6 @@ export const getColumns = () => {
             align: 'center',
             customFilterDropdown: true,
             width: 120,
-            fixed: 'left',
         },
         {
             title: '组合技能?',
@@ -36,7 +45,7 @@ export const getColumns = () => {
             align: 'center',
             customFilterDropdown: true,
             width: 120,
-            fixed: 'left',
+
         },
         {
             title: '被动触发特性',

@@ -16,7 +16,7 @@ export default function (queryParameter: IBaseQueryParameter, getList?: Function
         const { selectedKeys, confirm, column: { key } } = props;
         const keySp = key?.toString().split('Str')[0];
         const columnIndex = queryParameter.columns?.findIndex(item => item.name === keySp);
-        const column: IColumn = { func: 'eq', name: keySp!, value: selectedKeys[0] };
+        const column: IColumn = { func: 'like', name: keySp!, value: selectedKeys[0] };
         if (columnIndex != -1) queryParameter.columns?.splice(columnIndex!, 1, column);
         else queryParameter.columns?.push(column);
         confirm();

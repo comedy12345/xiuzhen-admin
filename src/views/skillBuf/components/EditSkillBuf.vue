@@ -153,7 +153,7 @@ import { useRoute } from 'vue-router'
 import { saveBuf } from "@/api/skillBufApi";
 import { ISkillBufForm } from '@/interface/skillBufType';
 import { message } from 'ant-design-vue';
-import useSkillBuf from "../hooks/skillBuf";
+import useGetEnum from "@/hooks/getEnum";
 import ChoiceSkill from "@/components/ChoiceSkill/index.vue";
 const props = defineProps({
     title: {
@@ -169,7 +169,7 @@ const { title, formDataProp } = toRefs(props);
 const emit = defineEmits(['close-Edit', 'on-ok']);
 const route = useRoute();
 // buf枚举下拉
-const { getEnumByType, filterOption } = useSkillBuf();
+const { getEnumByType, filterOption } = useGetEnum();
 
 onMounted(() => {
     visible.value = true;

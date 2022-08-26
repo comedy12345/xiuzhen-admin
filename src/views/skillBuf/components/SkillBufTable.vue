@@ -35,12 +35,20 @@
             </template>
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
-                    <a-button type="text" style="color: #1890FF;" @click="handlerAddSkillBuf(record)">
+                    <a-button type="text" style="color: #1890FF;"
+                              @click="handlerAddSkillBuf(record)">
                         编辑
                     </a-button>
-                    <a-button type="text" style="color: red;">删除</a-button>
+                    <a-popconfirm placement="leftTop" title="确定要删除这个buf?" ok-text="删除"
+                                  cancel-text="取消" @confirm="handlerDel(record.tid!)">
+                        <a-button type='text' style='color: red;'>
+                            删除
+                        </a-button>
+                    </a-popconfirm>
                 </template>
                 <template v-else-if="column.key === 'skillSid'">
+                    {{ record[column.key] }}
+                    -
                     {{ decodeURI(route.path).split('/').at(-1)?.split('技能buf管理')[0] }}
                 </template>
             </template>
@@ -55,7 +63,7 @@
 </template>
     
 <script setup lang='ts'>
-import { querySkillBufs } from '@/api/skillBufApi';
+import { querySkillBufs, deleteSkillBuf } from '@/api/skillBufApi';
 import { ISkillBufForm, ISkillBufList } from '@/interface/skillBufType';
 import { IBaseQueryParameter, IData } from '@/interface/types';
 import { computed, onMounted, reactive, ref } from 'vue';
@@ -66,7 +74,8 @@ import useGeneralQuery from "@/hooks/generalQuery";
 import QueryFooter from '@/components/QueryFooter/index.vue'
 import { SelectValue } from 'ant-design-vue/es/select';
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
-import useSkillBuf from "../hooks/skillBuf";
+import useGetEnum from "@/hooks/getEnum";
+import { message } from 'ant-design-vue';
 
 const route = useRoute();
 const showEditSkillBuf = ref(false);
@@ -99,8 +108,15 @@ const getSkillBufs = async () => {
     tableData.value = data;
 }
 
+const handlerDel = async (tid: string) => {
+    const { data } = await deleteSkillBuf(tid);
+    message.success(data);
+    getSkillBufs();
+
+}
+
 // 使用buf枚举下拉框
-const { isShowFilter, getEnumByKey, filterOption } = useSkillBuf();
+const { isShowFilter, getEnumByKey, filterOption } = useGetEnum();
 
 // 使用通用查询
 const { handleSearch, handleReset } = useGeneralQuery(queryParameter, getSkillBufs);

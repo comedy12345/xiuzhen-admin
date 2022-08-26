@@ -20,14 +20,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 import EditGameServices from './EditGameServices.vue';
 const emit = defineEmits(['refresh-table']);
 const editGameServicesRef = ref<InstanceType<typeof EditGameServices> | null>(null)
 const isShowEdit = ref(false);
 const add = () => {
     isShowEdit.value = true;
-    editGameServicesRef.value!.visible = true;
+    nextTick(() => {
+        editGameServicesRef.value!.visible = true;
+    })
+
 }
 </script>
 

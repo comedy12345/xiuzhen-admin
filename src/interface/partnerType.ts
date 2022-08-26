@@ -18,7 +18,7 @@ export interface IPartnerForm {
       // 闪避
       dodge?: number;
       // 所在区
-      domainId?: string;
+      domainId?: number;
       // 修为
       exp?: number;
       // 飞升

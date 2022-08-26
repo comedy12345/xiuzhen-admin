@@ -10,9 +10,9 @@ import { ColumnsType } from "ant-design-vue/es/table";
 export const columns: ColumnsType = [
     { title: "固定编号", key: 'sid', dataIndex: 'sid', align: 'center', width: 120, fixed: 'left', customFilterDropdown: true },
     { title: "伙伴名称", key: 'partnerName', dataIndex: 'partnerName', align: 'center', width: 120, fixed: 'left', customFilterDropdown: true },
-    { title: "所在区", key: 'domainTid', dataIndex: 'domainTid', align: 'center', width: 120, fixed: 'left', customFilterDropdown: true },
-    { title: "职业", key: 'job', dataIndex: 'job', align: 'center', width: 100, fixed: 'left' },
-    { title: "种族", key: 'race', dataIndex: 'race', align: 'center', width: 100, fixed: 'left' },
+    { title: "所在区", key: 'domainId', dataIndex: 'domainIdStr', align: 'center', width: 120, fixed: 'left', customFilterDropdown: true },
+    { title: "职业", key: 'jobStr', dataIndex: 'jobStr', align: 'center', width: 100, customFilterDropdown: true },
+    { title: "种族", key: 'raceStr', dataIndex: 'raceStr', align: 'center', width: 100, customFilterDropdown: true },
     { title: "血量", key: 'blood', dataIndex: 'blood', align: 'center', width: 100, },
     { title: "最大血量", key: 'maxBlood', dataIndex: 'maxBlood', align: 'center', width: 100, },
     { title: "能量", key: 'power', dataIndex: 'power', align: 'center', width: 100, },
@@ -32,6 +32,6 @@ export const columns: ColumnsType = [
     { title: "轮回", key: 'lifeBack', dataIndex: 'lifeBack', align: 'center', width: 100, },
     { title: "升星", key: 'star', dataIndex: 'star', align: 'center', width: 100, },
     { title: "伙伴描述", key: 'introduce', dataIndex: 'introduce', align: 'center', width: 200, },
-    { title: "操作", key: 'action', dataIndex: 'action', align: 'center', width: 100, fixed: 'right' },
+    { title: "操作", key: 'action', dataIndex: 'action', align: 'center', width: 200, fixed: 'right' },
 ];
 

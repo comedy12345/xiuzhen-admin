@@ -1,15 +1,4 @@
 
-// 下拉框数据
-export interface ISelectDatas {
-    type: number;
-    selectOptionVoList: ISelectOptionVoList[]
-}
-export interface ISelectOptionVoList {
-    name: string;
-    val: number;
-    label: string;
-    value: number;
-}
 
 export interface ISkillBufForm {
     // 技能特性
