@@ -18,10 +18,12 @@ export default function <K, V>(getList: Function) {
       const currentEditData = ref<V>();
 
       const handlerOk = () => {
+            editRef.value!.visible = false;
             currentEditData.value = undefined;
             getList();
       }
       const handlerCancel = () => {
+            editRef.value!.visible = false;
             currentEditData.value = undefined;
       }
 
