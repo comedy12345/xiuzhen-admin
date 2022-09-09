@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 10:12:46
+ * @LastEditTime: 2022-09-09 10:36:42
  */
 import { IBaseQueryParameter, IColumn } from "@/interface/types";
 import { ColumnType, FilterDropdownProps } from "ant-design-vue/es/table/interface";

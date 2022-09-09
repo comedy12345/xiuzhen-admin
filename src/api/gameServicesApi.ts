@@ -3,12 +3,12 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:31:25
+ * @LastEditTime: 2022-09-09 09:57:16
  */
 
 import useHttp from "@/hooks/useHttp";
 import { IBaseQueryParameter, IBaseResp, IData } from "@/interface/types";
-import { IGameServicesForm, IGameServicesList } from "../interface/gameServicesTypes";
+import { IDomain, IGameServicesForm, IGameServicesList } from "../interface/gameServicesTypes";
 import { Ref } from "vue";
 
 /**
@@ -44,6 +44,15 @@ export const queryGameServices = (data: IBaseQueryParameter, loading?: Ref<boole
         url: '/api/admin/servers/servers-query',
         method: "POST",
         data,
+        loading
+    })
+}
+
+export const queryDomain = (loading?: Ref<boolean>)
+    : Promise<IBaseResp<IDomain[]>> => {
+    return useHttp<IBaseResp<IDomain[]>>({
+        url: '/api/admin/servers/domain-name-query',
+        method: "POST",
         loading
     })
 }

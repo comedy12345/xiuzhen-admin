@@ -1,3 +1,10 @@
+/*
+ * @Description: 游戏服务类型
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-09-09 09:56:32
+ */
 // 编辑游戏服务
 export interface IGameServicesForm {
     tid?: number;
@@ -5,6 +12,14 @@ export interface IGameServicesForm {
     serverName?: string;
     // 状态 默认1 开启 0 关闭 2 更新 3维护
     stat?: number;
+}
+
+// 所在区
+export interface IDomain{
+    domainName:string,
+    parentTid:number,
+    serverName:string,
+    tid:number;
 }
 
 // 游戏服务列表

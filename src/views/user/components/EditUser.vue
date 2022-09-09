@@ -1,3 +1,10 @@
+<!--
+ * @Description: 用户编辑
+ * @Author: ljf
+ * @Date: 2022-08-11 09:16:46
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-09-09 10:02:21
+-->
 <template>
     <div class="edit-user-container">
         <a-modal v-model:visible="visible" :title="title" @ok="handlerOk" @cancel="handlerCancel"
@@ -6,7 +13,6 @@
             <a-form>
                 <a-form-item label="用户类型" :label-col="{ span: 4 }">
                     <a-radio-group v-model:value="formData.type">
-                        <a-radio value="2">玩家</a-radio>
                         <a-radio value="1">代理</a-radio>
                         <a-radio value="0">管理员</a-radio>
                     </a-radio-group>
@@ -44,7 +50,7 @@ const props = defineProps({
     currentEditData: {
         type: Object as PropType<IUserForm>,
         default: () => ({
-            type: "2",
+            type: "0",
             state: 1
         })
     }

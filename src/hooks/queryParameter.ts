@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-11 14:21:30
+ * @LastEditTime: 2022-09-09 15:34:41
  */
 
 import { IColumn, IQueryParameter } from "@/interface/types";
@@ -21,7 +21,7 @@ export default function useQueryParameter() {
     watch(() => queryForm, () => {
         queryParameterColumn.value = [];
         Object.keys(queryForm).forEach(name => {
-            queryForm[name] && queryParameterColumn.value.push({ func: 'eq', name, value: queryForm[name] })
+            queryForm[name] && queryParameterColumn.value.push({ func: 'like', name, value: queryForm[name] })
         });
     }, { deep: true });
     return {

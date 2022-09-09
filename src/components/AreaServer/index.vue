@@ -3,10 +3,10 @@
  * @Author: ljf
  * @Date: 2022-08-17 08:40:28
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 18:00:19
+ * @LastEditTime: 2022-09-09 10:00:28
 -->
 <script lang="tsx">
-import { defineComponent, ref, toRefs, watch } from 'vue';
+import { defineComponent } from 'vue';
 import { Select } from 'ant-design-vue';
 import useAreaServerHook from "./hooks/areaServerHook";
 import { SelectValue } from 'ant-design-vue/lib/select';
@@ -16,6 +16,10 @@ const AreaServer = defineComponent({
         value: {
             type: Number,
             default: null
+        },
+        multiple:{
+            type:Boolean,
+            default:false
         }
     },
     emits: ['update:value'],
@@ -29,7 +33,7 @@ const AreaServer = defineComponent({
                 <Select
                     value={props.value}
                     options={options.value}
-                    multiple={false}
+                    multiple={props.value}
                     onChange={handlerChange}
                     style="width: 100%"
                     placeholder='请选择区'

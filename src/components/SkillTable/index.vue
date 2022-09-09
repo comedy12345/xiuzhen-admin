@@ -155,6 +155,10 @@ const props = defineProps({
         type: Array<Key>,
         default: []
     },
+    detail: {
+        type: Boolean,
+        default: true
+    }
 })
 const {
     isDelAction,
@@ -166,7 +170,7 @@ const {
     isDragSort,
     isOpenMultiple,
     isOpenPagination,
-    isRelationSkill, isSinglePoint } = toRefs(props);
+    isRelationSkill, isSinglePoint, detail } = toRefs(props);
 const emit = defineEmits(['child-Skill', 'get-Select-skill', 'del-skill', 'get-Select-all-skill', 'del-skill-single']);
 const router = useRouter();
 
@@ -252,7 +256,7 @@ const filterColumns = computed(() => {
         })
     }
     // 删除表格操作列
-    if (isDelAction.value) {
+    if (isDelAction.value || !detail.value) {
         newColumns = columns.filter(item => {
             return item.key !== 'action';
         })

@@ -3,11 +3,11 @@
  * @Author: ljf
  * @Date: 2022-08-23 10:24:34
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-23 11:38:23
+ * @LastEditTime: 2022-09-09 14:52:30
  */
 
 import useHttp from "@/hooks/useHttp";
-import { IPartnerForm, IPartnerList } from "@/interface/partnerType";
+import { IGamerPartnerList, IPartnerForm, IPartnerList } from "@/interface/partnerType";
 import { ISkillList } from "@/interface/skillTypes";
 import { IBaseQueryParameter, IBaseResp, IData } from "@/interface/types";
 import { Ref } from "vue";
@@ -45,6 +45,21 @@ export const queryPartners = (data: IBaseQueryParameter, loading?: Ref<boolean>)
             data,
             loading
       })
+}
+
+/**
+ * @description: 查询玩家伙伴信息列表
+ * @return {*}
+ * @author: ljf
+ */
+ export const queryGamerPartners = (data: IBaseQueryParameter, loading?: Ref<boolean>)
+ : Promise<IBaseResp<IData<IGamerPartnerList[]>>> => {
+ return useHttp<IBaseResp<IData<IGamerPartnerList[]>>>({
+       url: '/api/admin/user/partner/query',
+       method: "POST",
+       data,
+       loading
+ })
 }
 
 /**

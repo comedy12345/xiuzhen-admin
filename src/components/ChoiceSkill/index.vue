@@ -13,7 +13,7 @@
                  @ok="handlerSaveSkill"
                  @cancel="handlerClose">
             <div>
-                <a-button style="margin:10px 0 0 18px" @click="() => showAddList = true"
+                <a-button v-if="detail" style="margin:10px 0 0 18px" @click="() => showAddList = true"
                           type="primary">
                     选择技能
                 </a-button>
@@ -24,6 +24,7 @@
                             :is-open-pagination="false"
                             :is-hide-screen="true"
                             :is-single-point="isSinglePoint"
+                            :detail="detail"
                             @del-skill-single="handlerDelSkillSingle"
                             @del-skill="handlerDelSkill">
                 </SkillTable>
@@ -105,6 +106,10 @@ const props = defineProps({
     isSinglePoint: {
         type: Boolean,
         default: false
+    },
+    detail:{
+        type: Boolean,
+        default: true
     }
 })
 

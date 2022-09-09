@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-18 09:56:15
+ * @LastEditTime: 2022-09-09 10:21:58
  */
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 
@@ -43,6 +43,13 @@ export const routes: RouteRecordRaw[] = [
                         path: '/user',
                         meta: { icon: 'user-outlined' },
                         component: () => import('@/views/user/index.vue'),
+
+                  },
+                  {
+                        name: '玩家管理',
+                        path: '/gamer',
+                        meta: { icon: 'user-outlined' },
+                        component: () => import('@/views/gamer/index.vue'),
 
                   },
                   {

@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-23 09?:42?:11
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-23 11:36:53
+ * @LastEditTime: 2022-09-09 15:03:29
  */
 export interface IPartnerForm {
       tid?: number;
@@ -66,4 +66,13 @@ export interface IPartnerList extends IPartnerForm {
       updateAt?: string;
       // 更新人
       updateBy?: string;
+}
+
+// 用户伙伴
+export interface IGamerPartnerList extends IPartnerList{
+      userTid?:number;
+      // 是否用户主伙伴
+      isMasterPartner?:number;
+      // 是否上阵容
+      isPlayed?:number;
 }

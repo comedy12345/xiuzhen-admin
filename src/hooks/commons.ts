@@ -7,7 +7,7 @@ import { computed, onMounted, reactive, ref } from "vue";
  * @Author: ljf
  * @Date: 2022-08-23 11:42:52
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-23 14:44:11
+ * @LastEditTime: 2022-09-09 14:58:35
  */
 export default function <K, V>(getList: Function) {
 
