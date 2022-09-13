@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-09-09 17:02:05
+ * @LastEditTime: 2022-09-13 15:41:46
 -->
 <template>
     <div class="gamer-container">
@@ -33,9 +33,7 @@
                         <a-button type="text" style="color: #1890FF;" @click="handlerQueryGamerPartner(record.tid!)">
                             查看用户伙伴
                         </a-button>
-                        <a-button type="text" style="color: #1890FF;">
-                            重设密码
-                        </a-button>
+                        <RestPwd :tid="record.tid"></RestPwd>
                         <a-switch v-model:checked="record['state']" checked-children="正常" un-checked-children="冻结" />
                     </template>
                 </template>
@@ -53,7 +51,8 @@
                     </div>
                     <div v-else-if="['state'].some(key => key === props.column.key)"
                          class="skill-query-box">
-                        <a-radio-group :value="props.selectedKeys[0]" @change="(e: RadioChangeEvent) => props.setSelectedKeys(e.target.value||e.target.value===0 ? [e.target.value] : [])">
+                        <a-radio-group :value="props.selectedKeys[0]"
+                                       @change="(e: RadioChangeEvent) => props.setSelectedKeys(e.target.value||e.target.value===0 ? [e.target.value] : [])">
                             <a-radio :value="0">正常</a-radio>
                             <a-radio :value="1">冻结</a-radio>
                         </a-radio-group>
@@ -81,6 +80,7 @@ import useGeneralQuery from "@/hooks/generalQuery";
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import { message } from 'ant-design-vue';
 import { RadioChangeEvent } from 'ant-design-vue/es/radio/interface';
+import RestPwd from "@/components/RestPwd/index.vue";
 
 const tableLodaing = ref(false);
 const getList = async () => {
@@ -101,7 +101,6 @@ const handerReset = () => {
     queryParameter.columns = [];
     getList();
 }
-
 const queryAreaGamer = ref();
 const handlerQuery = () => {
     if (!queryAreaGamer.value) return message.warn('请选择所在区');
@@ -110,12 +109,14 @@ const handlerQuery = () => {
     else queryParameter.columns?.push({ func: 'like', name: 'domain', value: queryAreaGamer.value });
     getList();
 }
+// 玩家伙伴
 const userPartnerRef = ref<InstanceType<typeof UserPartner> | null>(null);
 const currentUserTid = ref<number | undefined>(undefined);
 const handlerQueryGamerPartner = (tid: number) => {
     userPartnerRef.value!.visible = true;
     currentUserTid.value = tid;
 }
+
 </script>
     
 <style lang="scss" scoped>

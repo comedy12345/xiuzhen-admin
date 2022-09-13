@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-09-09 17:07:32
+ * @LastEditTime: 2022-09-13 15:42:21
 -->
 <template>
     <div class="user-container">
@@ -16,9 +16,7 @@
                         <a-button type="text" style="color: #1890FF;" @click="handlerEdit(record)">
                             编辑
                         </a-button>
-                        <a-button type="text" style="color: #1890FF;">
-                            重设密码
-                        </a-button>
+                        <RestPwd :tid="record.tid"></RestPwd>
                         <a-switch v-model:checked="record['state']" checked-children="正常" un-checked-children="冻结" :unCheckedValue="1" :checkedValue="0" @change="(checked)=>handlerState(checked,record.tid)"/>
                     </template>
                 </template>
@@ -77,6 +75,7 @@ import { IUserForm, IUserList } from '@/interface/userType';
 import { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import { RadioChangeEvent } from 'ant-design-vue/es/radio/interface';
 import useGeneralQuery from "@/hooks/generalQuery";
+import RestPwd from "@/components/RestPwd/index.vue";
 const tableLodaing = ref(false);
 const getList = async () => {
     const { data } = await queryUserList(queryParameter, tableLodaing);

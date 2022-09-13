@@ -1,71 +1,84 @@
 <template>
-  <div class="login">
-    <div class="login-container">
-      <div class="img-box">
-        <img src="/assets/login-cover.webp" alt="" />
-      </div>
-      <div class="login-form-box">
-        <div class="box-center">
-          <div class="login-title">
-            <img src="https://www.surely.cool/surely-vue-logo.png" alt="" />
-            <span> 修正游戏后台管理系统 </span>
-          </div>
-          <a-form labelAlign="left" :label-col="{ span: 4 }">
-            <a-form-item label="用户名" name="username">
-              <a-input v-model:value="loginData.userName">
-                <template #prefix>
-                  <UserOutlined class="site-form-item-icon" />
-                </template>
-              </a-input>
-            </a-form-item>
-
-            <a-form-item label="密码" name="password">
-              <a-input-password v-model:value="loginData.passwd">
-                <template #prefix>
-                  <LockOutlined class="site-form-item-icon" />
-                </template>
-              </a-input-password>
-            </a-form-item>
-
-            <div class="login-action">
-              <a-form-item name="remember" no-style>
-                <a-checkbox>记住密码</a-checkbox>
-              </a-form-item>
-
-              <a-form-item>
-                <a-button @click="login">登录</a-button>
-              </a-form-item>
+  <a-spin tip="登录中..." :spinning="spinning">
+    <div class="login">
+      <div class="login-container">
+        <div class="img-box">
+          <img src="/assets/login-cover.webp" alt="" />
+        </div>
+        <div class="login-form-box">
+          <div class="box-center">
+            <div class="login-title">
+              <img src="https://www.surely.cool/surely-vue-logo.png" alt="" />
+              <span> 修正游戏后台管理系统 </span>
             </div>
-          </a-form>
+            <a-form labelAlign="left" :label-col="{ span: 4 }">
+              <a-form-item label="用户名" name="username">
+                <a-input v-model:value="loginData.userName">
+                  <template #prefix>
+                    <UserOutlined class="site-form-item-icon" />
+                  </template>
+                </a-input>
+              </a-form-item>
+
+              <a-form-item label="密码" name="password">
+                <a-input-password v-model:value="loginData.passwd">
+                  <template #prefix>
+                    <LockOutlined class="site-form-item-icon" />
+                  </template>
+                </a-input-password>
+              </a-form-item>
+
+              <div class="login-action">
+                <a-form-item name="remember" no-style>
+                  <a-checkbox>记住密码</a-checkbox>
+                </a-form-item>
+
+                <a-form-item>
+                  <a-button @click="login">登录</a-button>
+                </a-form-item>
+              </div>
+            </a-form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </a-spin>
 </template>
 
 <script lang="ts" setup>
 import { useRouter, useRoute } from 'vue-router';
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { ILoginRequest } from '@/interface/loginTypes';
 import { reqLogin } from "@/api/loginApi";
 import useUserInfoStore from "@/store/userInfo";
+import { getCurrentUserInfo } from '@/api/userApi';
 const router = useRouter();
 const route = useRoute();
 const loginData = reactive<ILoginRequest>({
   userName: '',
   passwd: '',
 })
+const spinning = ref(false);
 // 登录
 const login = async () => {
-  const { data: { token } } = await reqLogin(loginData);
-  const { login } = useUserInfoStore()
-  login({ token });
-  const redirect = (route.query['redirect'] as string);
-  if (redirect) {
-    router.push(redirect);
-  } else {
-    router.push('/');
+  try {
+    spinning.value = true;
+    const { data: { token } } = await reqLogin(loginData);
+    const { data } = await getCurrentUserInfo();
+    data.token = token;
+    const { login } = useUserInfoStore()
+    login(data);
+    const redirect = (route.query['redirect'] as string);
+    if (redirect) {
+      router.push(redirect);
+    } else {
+      router.push('/');
+    }
+  } finally {
+    spinning.value = false;
   }
+
+
 }
 </script>
 

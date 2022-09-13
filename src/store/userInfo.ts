@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-26 09:05:35
  * @LastEditors: ljf
- * @LastEditTime: 2022-07-26 10:10:20
+ * @LastEditTime: 2022-09-13 16:52:46
  */
 
 import { defineStore } from 'pinia';
@@ -12,16 +12,18 @@ import pinia from "@/store/store";
 export interface IUserInfo {
     userName?: string,
     passwd?: string,
-    token: string,
+    lastLoginTime?:string,
+    phone?:string,
+    power?:string,
+    state?:string,
+    tid?:number,
+    type?:string,
+    token?: string,
 }
 export const KEY_USER_INFO_ID = 'userInfo';
 const useUserInfoStore = defineStore({
     id: KEY_USER_INFO_ID,
-    state: (): IUserInfo => ({
-        userName: '',
-        passwd: '',
-        token: ''
-    }),
+    state: (): IUserInfo => ({}),
     actions: {
         setToken(token: string) {
             this.$state.token = token;
@@ -31,7 +33,7 @@ const useUserInfoStore = defineStore({
                 ...this.$state,
                 ...userInfo
             }
-        }
+        },
     }
 })
 
