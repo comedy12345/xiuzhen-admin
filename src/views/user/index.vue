@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-09-13 15:42:21
+ * @LastEditTime: 2022-09-13 17:15:23
 -->
 <template>
     <div class="user-container">
@@ -95,7 +95,7 @@ const {
 // 使用通用查询
 const { handleSearch, handleReset } = useGeneralQuery(queryParameter, getList);
 
-const handlerState=async(state:any,tid:string)=>{
+const handlerState=async(state:any,tid:number)=>{
    const res=await saveUser({tid,state});
    console.log(res);
 }

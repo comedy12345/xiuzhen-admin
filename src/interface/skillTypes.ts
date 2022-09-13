@@ -1,3 +1,10 @@
+/*
+ * @Description: 技能接口类型
+ * @Author: ljf
+ * @Date: 2022-08-17 08:40:29
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-09-13 17:13:59
+ */
 export interface ISkillForm {
     tid?: string,
     sid?: string,
@@ -16,7 +23,7 @@ export interface ISkillForm {
     // 消耗属性
     expendProp?: number;
     // 所在区
-    domainId?: string;
+    domainId?: number;
     // 组合技能子技能出招顺序
     combineSkOrder?: number;
     combineSkLs?: string,
