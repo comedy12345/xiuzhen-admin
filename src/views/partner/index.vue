@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-23 15:07:47
+ * @LastEditTime: 2022-09-14 15:09:37
 -->
 <template>
     <div class="partner-container">
@@ -11,7 +11,7 @@
         <div class="table-box">
             <a-table :loading="tableLoading" :dataSource="tableData?.records" rowKey="tid"
                      :columns="columns"
-                     size="small" bordered :pagination="pagination" :scroll="{ x: 1200, y: 400 }"
+                     size="small" bordered :pagination="pagination" :scroll="{ x: 1240, y: 400 }"
                      @change="handleTableChange">
                 <template #customFilterDropdown="props">
                     <div v-if="['sid', 'partnerName'].some(key => key === props.column.key)"
@@ -141,6 +141,8 @@ const { isShowFilter, getEnumByKey, filterOption } = useGetEnum();
     
 <style lang="scss" scoped>
 .partner-container {
+    min-width: 1240px;
+    margin: 0 auto;
     .table-box {
         padding: 20px;
         background-color: white;

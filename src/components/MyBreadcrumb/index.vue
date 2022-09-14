@@ -1,3 +1,10 @@
+<!--
+ * @Description: 面包屑
+ * @Author: ljf
+ * @Date: 2022-07-13 17:07:44
+ * @LastEditors: ljf
+ * @LastEditTime: 2022-09-14 14:37:06
+-->
 <script lang="tsx">
 import { computed, defineComponent, inject, ref, Ref } from "vue";
 import { Breadcrumb, BreadcrumbItem } from 'ant-design-vue';
@@ -36,12 +43,11 @@ export default defineComponent({
       height: 50px;
       display: flex;
       align-items: center;
-
-
       .breadcrumb-container {
             margin-left: 20px;
-
+         
             :deep(.ant-breadcrumb) {
+                  white-space:nowrap;
                   .ant-breadcrumb-link {
                         cursor: pointer;
                   }

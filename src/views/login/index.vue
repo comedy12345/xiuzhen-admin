@@ -29,10 +29,6 @@
               </a-form-item>
 
               <div class="login-action">
-                <a-form-item name="remember" no-style>
-                  <a-checkbox>记住密码</a-checkbox>
-                </a-form-item>
-
                 <a-form-item>
                   <a-button @click="login">登录</a-button>
                 </a-form-item>
@@ -63,10 +59,11 @@ const spinning = ref(false);
 const login = async () => {
   try {
     spinning.value = true;
+    const { login } = useUserInfoStore()
     const { data: { token } } = await reqLogin(loginData);
+    login({ token });
     const { data } = await getCurrentUserInfo();
     data.token = token;
-    const { login } = useUserInfoStore()
     login(data);
     const redirect = (route.query['redirect'] as string);
     if (redirect) {
@@ -135,7 +132,7 @@ const login = async () => {
 
         .login-action {
           display: flex;
-          justify-content: space-between;
+          justify-content:flex-end;
         }
       }
     }

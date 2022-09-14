@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 14:05:03
+ * @LastEditTime: 2022-09-14 11:20:41
  */
 
 import { router } from '@/route';
@@ -16,15 +16,13 @@ import { NoAuthentication, doNotShow } from '@/config/routeExclusion';
 
 
 router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      const { $state: { token } } = useUserInfoStore();
+      const { $state: { token, type } } = useUserInfoStore();
       if (token) {
             // 有token,当前页为登录页就跳转
             if (to.path === '/login') {
-                  next({ path: '/' })
+                  next({ path: '/' });
             } else {
-
-                  saveRouteHistory(to);
-                  next()
+                  validateAuthorization(to, (to.meta.authorization as []), type!, next);
             }
       } else {
             /* has no token*/
@@ -35,7 +33,17 @@ router.beforeEach((to, from: RouteLocationNormalized, next: NavigationGuardNext)
                   next(`/login?redirect=${to.path}`); // 否则全部重定向到登录页
             }
       }
-})
+});
+
+// 判断用户是否有权限进入
+const validateAuthorization = (to: RouteLocationNormalized, routeAuthorization: Array<number>, userType: string, next: NavigationGuardNext) => {
+      if (routeAuthorization && !routeAuthorization.includes(Number(userType))) {
+            next('/noPermission');
+      } else {
+            routeAuthorization && saveRouteHistory(to);
+            next();
+      }
+}
 
 /**
  * @description: 保存进入的路由历史记录

@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-09-13 15:41:46
+ * @LastEditTime: 2022-09-14 14:32:25
 -->
 <template>
     <div class="gamer-container">
@@ -121,6 +121,10 @@ const handlerQueryGamerPartner = (tid: number) => {
     
 <style lang="scss" scoped>
 .gamer-container {
+
+    min-width: 1240px;
+    margin: 0 auto;
+
     .operation {
         background-color: white;
         padding: 10px 20px;

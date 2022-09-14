@@ -78,6 +78,7 @@ export default defineComponent({
       }
 
       .layout-content {
+
             .layout-header {
                   height: 80px;
                   background-color: rgb(255, 255, 255);
@@ -93,7 +94,7 @@ export default defineComponent({
                   height: calc(100vh - 80px);
                   overflow-y: scroll;
                   padding: 20px;
-
+                 
                   :deep(.ant-table-wrapper) {
 
                         .ant-table-thead {

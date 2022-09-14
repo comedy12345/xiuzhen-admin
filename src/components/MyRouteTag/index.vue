@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 16:50:37
+ * @LastEditTime: 2022-09-14 14:43:17
 -->
 <script lang="tsx">
 import { defineComponent } from "vue";
@@ -45,7 +45,6 @@ export default defineComponent({
 .my-route-tag {
       height: 30px;
       display: flex;
-
       .ant-tag {
             height: 26px;
             line-height: 24px;

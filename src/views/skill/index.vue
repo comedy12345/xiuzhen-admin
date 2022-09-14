@@ -3,7 +3,7 @@
  * @Author: ljf
  * @Date: 2022-08-11 09:16:46
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-17 16:11:52
+ * @LastEditTime: 2022-09-14 14:29:36
 -->
 <template>
     <div class="skill-container">
@@ -40,5 +40,10 @@ const handlerClose = () => {
     childSkillShow.value = false;
 }
 </script>
-
+<style lang="scss" scoped>
+.skill-container {
+    min-width: 1240px;
+    margin: 0 auto;
+}
+</style>
     

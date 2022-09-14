@@ -3,13 +3,14 @@
  * @Author: ljf
  * @Date: 2022-07-13 17:07:44
  * @LastEditors: ljf
- * @LastEditTime: 2022-08-18 09:56:11
+ * @LastEditTime: 2022-09-14 11:41:39
 -->
 <script lang="tsx">
 import { defineComponent, PropType, toRefs } from "vue";
 import { MenuItem, SubMenu } from 'ant-design-vue';
 import { RouteRecordRaw, RouterLink } from "vue-router";
 import { doNotShow } from "@/config/routeExclusion";
+import useUserInfoStore from "@/store/userInfo";
 const MyMenuItem = defineComponent({
       props: {
             routesMenu: {
@@ -19,6 +20,7 @@ const MyMenuItem = defineComponent({
       },
       setup(props) {
             const { routesMenu } = toRefs(props);
+            const { $state: { type } } = useUserInfoStore();
             const routeIsIcon = {
                   'dashboard-two-tone': <dashboard-two-tone />,
                   'user-outlined': <user-outlined />,
@@ -31,6 +33,10 @@ const MyMenuItem = defineComponent({
                   routesMenu.value.map(item => {
                         const { path, name, children, meta } = item;
                         const icon: string | any = meta?.icon;
+                        const authorization = meta?.authorization as Array<number>;
+                        // 添加无权访问菜单
+                        if (!authorization.includes(Number(type))) doNotShow.push(path);
+                        // 过滤无权访问菜单
                         if (path !== '/' && doNotShow.some(doNotShowItem => path.includes(doNotShowItem))) return;
                         if (children) {
                               return (
